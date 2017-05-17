@@ -20,7 +20,6 @@
                                 <settings></settings>
                             </f7-tab>
                         </f7-tabs>
-                        <!--<menubar></menubar>-->
 
                         <f7-toolbar class="theme-blue" tabbar bottom>
                             <f7-link tab-link="#home">
@@ -61,7 +60,6 @@
 
 <script>
     import Login from './assets/vue/login.vue';
-    import Menubar from './assets/vue/menu.vue';
     import Home from './assets/vue/home.vue';
     import Alerts from './assets/vue/alerts.vue';
     import Profile from './assets/vue/profile.vue';
@@ -83,7 +81,6 @@
         },
         components: {
             Login,
-            Menubar,
             Home,
             Alerts,
             Profile,
