@@ -8,9 +8,11 @@ import Framework7Vue from 'framework7-vue'
 // Import F7 Material Theme Styles
 import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
 import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
+import MaterialIcons from './assets/css/material-icons.css'
 
 // Import App Custom Styles
 import AppStyles from './assets/sass/main.scss'
+import CustomAppStyles from './assets/sass/custom-main.scss'
 
 import Routes from './routes.js'
 
@@ -19,7 +21,7 @@ import App from './main.vue'
 Vue.use(Framework7Vue);
 
 // Init App
-new Vue({
+let vm = new Vue({
   el: '#app',
   template: '<app/>',
   framework7: {
