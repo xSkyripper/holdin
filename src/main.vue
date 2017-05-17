@@ -1,47 +1,59 @@
 <template>
     <!-- App --->
     <div id="app">
-        <f7-statusbar theme="blue"></f7-statusbar>
+        <f7-statusbar></f7-statusbar>
         <f7-views>
             <f7-view id="main-view" class="layout-dark" navbar-through :dynamic-navbar="true" main>
-                <!-- Navbar -->
-                <!--<f7-navbar>-->
-                    <!--<f7-nav-left>-->
-                        <!--<f7-link icon="icon-bars" open-panel="left"></f7-link>-->
-                    <!--</f7-nav-left>-->
-                    <!--<f7-nav-center sliding>H.O.L.D.I.N</f7-nav-center>-->
-                <!--</f7-navbar>-->
-                <!-- Pages -->
                 <f7-pages>
                     <div class="page">
-                        <menubar></menubar>
+                        <f7-tabs swipeable>
+                            <f7-tab id="home">
+                                <home></home>
+                            </f7-tab>
+                            <f7-tab id="alerts">
+                                <alerts></alerts>
+                            </f7-tab>
+                            <f7-tab id="profile">
+                                <profile></profile>
+                            </f7-tab>
+                            <f7-tab id="settings">
+                                <settings></settings>
+                            </f7-tab>
+                        </f7-tabs>
+                        <!--<menubar></menubar>-->
 
-                        <div class="page-content">
-                            <f7-block-title>Modals</f7-block-title>
-                            <f7-block>
-                                <f7-grid>
-                                    <f7-col width="50">
-                                        <f7-button open-login-screen="#login-screen">Login Screen</f7-button>
-                                    </f7-col>
-                                </f7-grid>
-
-                            </f7-block>
-                            <f7-list>
-                                <f7-list>
-                                    <f7-list-item link="/about/" title="About"></f7-list-item>
-                                    <f7-list-item link="/form/" title="Form"></f7-list-item>
-                                    <f7-list-item link="/dynamic-route/blog/45/post/125/?foo=bar#about"
-                                                  title="Dynamic Route"></f7-list-item>
-                                </f7-list>
-                            </f7-list>
-
-                        </div>
-                        <!-- page-content -->
+                        <f7-toolbar class="theme-blue" tabbar bottom>
+                            <f7-link tab-link="#home">
+                                <i class="material-icons">
+                                    home
+                                    <span class="badge bg-red">1</span>
+                                </i>
+                            </f7-link>
+                            <f7-link tab-link="#alerts">
+                                <i class="material-icons">
+                                    warning
+                                    <span class="badge bg-red">1</span>
+                                </i>
+                            </f7-link>
+                            <f7-link tab-link="#profile">
+                                <i class="material-icons">
+                                    account_circle
+                                    <span class="badge bg-red">1</span>
+                                </i>
+                            </f7-link>
+                            <f7-link tab-link="#settings">
+                                <i class="material-icons">
+                                    settings
+                                    <span class="badge bg-red">1</span>
+                                </i>
+                            </f7-link>
+                        </f7-toolbar>
                     </div>
                     <!-- page -->
                 </f7-pages>
             </f7-view>
         </f7-views>
+
 
         <login :class="{'modal-in': showLogin}"></login>
     </div>
@@ -50,12 +62,16 @@
 <script>
     import Login from './assets/vue/login.vue';
     import Menubar from './assets/vue/menu.vue';
+    import Home from './assets/vue/home.vue';
+    import Alerts from './assets/vue/alerts.vue';
+    import Profile from './assets/vue/profile.vue';
+    import Settings from './assets/vue/settings.vue';
 
     export default {
-        mounted: function () {
-//            this.checkUserData();
+        mounted() {
+            this.checkUserData();
         },
-        data: function () {
+        data() {
             return {
                 showLogin: false
             }
@@ -67,7 +83,11 @@
         },
         components: {
             Login,
-            Menubar
+            Menubar,
+            Home,
+            Alerts,
+            Profile,
+            Settings
         }
     }
 </script>
