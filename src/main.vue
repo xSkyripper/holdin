@@ -3,14 +3,15 @@
     <div id="app">
         <f7-statusbar></f7-statusbar>
         <f7-views>
-            <f7-view id="main-view" class="layout-dark" navbar-through :dynamic-navbar="true" main>
+            <f7-view id="main-view" class="layout-dark" main toolbar-through>
                 <f7-pages>
-                    <div class="page">
+                    <f7-page>
+
                         <f7-tabs swipeable>
                             <f7-tab id="home">
                                 <home></home>
                             </f7-tab>
-                            <f7-tab id="alerts">
+                            <f7-tab id="alerts" active>
                                 <alerts></alerts>
                             </f7-tab>
                             <f7-tab id="profile">
@@ -47,12 +48,11 @@
                                 </i>
                             </f7-link>
                         </f7-toolbar>
-                    </div>
-                    <!-- page -->
+
+                    </f7-page>
                 </f7-pages>
             </f7-view>
         </f7-views>
-
 
         <login :class="{'modal-in': showLogin}"></login>
     </div>

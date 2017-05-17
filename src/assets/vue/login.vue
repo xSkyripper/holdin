@@ -1,10 +1,10 @@
 <template>
-    <div class="login-screen" id="login-screen" :class="['theme-'+color, layout]">
+    <f7-login-screen id="login-screen" :class="['theme-'+color, layout]">
         <f7-view>
             <f7-pages>
                 <f7-page login-screen>
                     <f7-login-screen-title>
-                        HOLDIN User Info
+                        H.O.L.D.I.N. Info
                     </f7-login-screen-title>
 
                     <f7-list form>
@@ -25,7 +25,7 @@
                 </f7-page>
             </f7-pages>
         </f7-view>
-    </div>
+    </f7-login-screen>
     <!-- login-screen -->
 
 </template>
