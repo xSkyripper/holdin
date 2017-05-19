@@ -17,7 +17,11 @@
                         <div class="timeline-item-title">{{ msg.name }}</div>
                         <div class="timeline-item-subtitle">{{ msg.location }}</div>
                         <div class="timeline-item-text">{{ msg.type }}</div>
-                        <f7-button :color="msgTypeToColor(msg.type)">View</f7-button>
+
+                        <f7-button :href="'/message/'+msg.id"
+                                   :color="msgTypeToColor(msg.type)">
+                            View
+                        </f7-button>
                     </div>
                 </div>
             </div>
@@ -31,6 +35,7 @@
             return {
                 messages: [
                     {
+                        id: 1,
                         name: 'Cristea Alex',
                         location: 'Targusor C1',
                         type: 'alert',
@@ -40,6 +45,7 @@
                         year: '2017'
                     },
                     {
+                        id: 2,
                         name: 'Vasiliu Alexandru',
                         location: 'Targusor C1',
                         type: 'warn',
@@ -49,6 +55,7 @@
                         year: '2017'
                     },
                     {
+                        id: 3,
                         name: 'Lucian Dan',
                         location: 'Str. Pepenilor',
                         type: 'info',
@@ -58,6 +65,7 @@
                         year: '2017'
                     },
                     {
+                        id: 4,
                         name: 'Dan Cehan',
                         location: 'Str. Pepenilor nr 14',
                         type: 'alert',

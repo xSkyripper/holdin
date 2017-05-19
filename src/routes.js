@@ -18,5 +18,9 @@ export default [
   {
     path: '/login/',
     component: require('./assets/vue/login.vue')
+  },
+  {
+    path: '/message/:id',
+    component: require('./assets/vue/message.vue')
   }
 ]
