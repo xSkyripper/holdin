@@ -1,6 +1,5 @@
 <template>
     <div class="page-content">
-        <h2>Alerts Page Here</h2>
         <f7-timeline>
             <div v-for="msg in messages" class="timeline-item">
                 <div class="timeline-item-date">{{ msg.day }}

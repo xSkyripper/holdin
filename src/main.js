@@ -27,9 +27,16 @@ let vm = new Vue({
   framework7: {
     root: '#app',
     material: true,
-    routes: Routes
+    routes: Routes,
+    // onPageInit: function (app, page) {
+    //
+    // },
+    // onF7Init: function () {
+    //   console.log('f7-init');
+    // }
   },
   components: {
     app: App
-  }
+  },
+
 });
