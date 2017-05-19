@@ -8,11 +8,16 @@
                     <f7-list form>
                         <f7-list-item>
                             <f7-label>Username</f7-label>
-                            <f7-input name="username" type="text" placeholder="Name here"></f7-input>
+                            <f7-input name="username" type="text" placeholder="Username"></f7-input>
                         </f7-list-item>
-                        <f7-list-item>
-                            <f7-label>Password</f7-label>
-                            <f7-input name="password" type="password" placeholder="Password"></f7-input>
+                        <f7-list-item smart-select smart-select-searchbar title="Country">
+                            <select name="fruits">
+                                <option value="country1" selected>Country 1</option>
+                                <option value="country2">Country 2</option>
+                                <option value="country3">Country 3</option>
+                                <option value="country4">Country 4</option>
+                                <option value="country5">Country 5</option>
+                            </select>
                         </f7-list-item>
                     </f7-list>
 
