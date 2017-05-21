@@ -1,15 +1,17 @@
 <template>
     <div class="page-content">
+        <f7-button @click="addRand">Add Rand</f7-button>
         <f7-timeline class="virtual-list">
-
         </f7-timeline>
     </div>
 </template>
 
 <script>
+    let timeout;
     export default {
         data() {
             return {
+                vList: null,
                 messages: this.msgGen(100),
                 messages_old: [
                     {
@@ -55,9 +57,14 @@
                 ]
             }
         },
+        watch: {
+          messages_old: function(newMsg) {
+              this.vList.update();
+          }
+        },
         computed: {
             sortedMsgs() {
-                return this.messages.sort(function (obj1, obj2) {
+                return this.messages_old.sort(function (obj1, obj2) {
                     let d1 = new Date(obj1.year, obj1.month, obj1.day, obj1.time.split(":")[0], obj1.time.split(":")[1]);
                     let d2 = new Date(obj2.year, obj2.month, obj2.day, obj2.time.split(":")[0], obj2.time.split(":")[1]);
                     return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
@@ -67,8 +74,8 @@
         props: {},
         methods: {
             onF7Init() {
-                this.$f7.virtualList('.virtual-list', {
-                    items: this.sortedMsgs,
+                this.vList = this.$f7.virtualList('.virtual-list', {
+                    items: this.messages_old,
                     height: 170, // is this right ?
                     template: '<div class="timeline-item">' +
                     '<div class="timeline-item-date">' +
@@ -113,27 +120,34 @@
             },
             msgGen(max) {
                 let msgs = [];
-                let types = ['alert', 'warn', 'info'];
                 for (let i = 0; i < max; ++i) {
-                    let H = String(this.randomIntFromInterval(0, 23));
-                    let m = String(this.randomIntFromInterval(0, 59));
-                    let day = String(this.randomIntFromInterval(1, 15));
-                    H = H.length < 2 ? '0' + H : H;
-                    m = m.length < 2 ? '0' + m : m;
-                    day = day.length < 2 ? '0' + day : day;
-
-                    msgs.push({
-                        id: i,
-                        name: 'Username ' + i,
-                        location: 'Location ' + i,
-                        type: types[Math.floor(Math.random() * types.length)],
-                        time: H + ':' + m,
-                        day: day,
-                        month: '05',
-                        year: '2017'
-                    })
+                    this.addRandomMsg(msgs, i);
                 }
                 return msgs;
+            },
+            addRandomMsg(msgs, i){
+                let H = String(this.randomIntFromInterval(0, 23));
+                let m = String(this.randomIntFromInterval(0, 59));
+                let day = String(this.randomIntFromInterval(1, 15));
+                H = H.length < 2 ? '0' + H : H;
+                m = m.length < 2 ? '0' + m : m;
+                day = day.length < 2 ? '0' + day : day;
+
+                let types = ['alert', 'warn', 'info'];
+                msgs.push({
+                    id: i,
+                    name: 'Username ' + i,
+                    location: 'Location ' + i,
+                    type: types[Math.floor(Math.random() * types.length)],
+                    time: H + ':' + m,
+                    day: day,
+                    month: '05',
+                    year: '2017'
+                });
+            },
+            addRand() {
+                console.log("msgs old len = " + this.messages_old.length);
+                this.addRandomMsg(this.messages_old, this.messages_old.length + 1);
             }
         }
     }

@@ -5,7 +5,7 @@
         <f7-block>
             <f7-grid>
                 <f7-col width="50">
-                    <f7-button @click="goToLogin">Login Screen</f7-button>
+                    <f7-button @click="goToLogin">Login</f7-button>
                 </f7-col>
             </f7-grid>
 
