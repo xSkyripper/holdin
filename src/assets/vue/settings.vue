@@ -1,16 +1,29 @@
 <template>
     <div class="page-content">
-        <h2>Settings Page Here</h2>
+        <f7-block-title>
+            <h2>Settings</h2>
+        </f7-block-title>
 
-        <f7-block>
-            <f7-grid>
-                <f7-col width="50">
-                    <f7-button @click="goToLogin">Login</f7-button>
-                </f7-col>
-            </f7-grid>
-
-            <p>Username: Alex</p>
-        </f7-block>
+        <f7-list>
+            <a href="#" class="item-link">
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-media"><i class="material-icons">code</i></div>
+                        <div class="item-title">IPFS Daemon</div>
+                        <div class="item-after">Restart</div>
+                    </div>
+                </div>
+            </a>
+            <a href="#" @click="goToLogin" class="item-link">
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-media"><i class="material-icons">account_box</i></div>
+                        <div class="item-title">Profile</div>
+                        <div class="item-after">Set personal data</div>
+                    </div>
+                </div>
+            </a>
+        </f7-list>
 
     </div>
 </template>
@@ -20,9 +33,7 @@
     export default {
         props: {},
         data() {
-            return {
-
-            }
+            return {}
         },
         computed: {},
         methods: {

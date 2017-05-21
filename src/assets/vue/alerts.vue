@@ -58,9 +58,21 @@
             }
         },
         watch: {
-          messages_old: function(newMsg) {
-              this.vList.update();
-          }
+            filter: function (newFilter) {
+                let filterIndexes = [];
+
+                if (newFilter === 'all')
+                    this.vList.resetFilter();
+                else {
+                    this.vList.items.forEach(function (item, ind) {
+                        item.type === newFilter ? filterIndexes.push(ind) : null
+                    });
+                    this.vList.filterItems(filterIndexes);
+                }
+            },
+            messages_old: function (newMsg) {
+                this.vList.update();
+            }
         },
         computed: {
             sortedMsgs() {
@@ -71,7 +83,7 @@
                 });
             }
         },
-        props: {},
+        props: ['filter'],
         methods: {
             onF7Init() {
                 this.vList = this.$f7.virtualList('.virtual-list', {

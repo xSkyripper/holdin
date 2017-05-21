@@ -13,9 +13,21 @@
                             <f7-tab id="alerts" active>
                                 <f7-fab-speed-dial>
                                     <f7-fab-actions>
-                                        <f7-fab-action color="red" @click="">A</f7-fab-action>
-                                        <f7-fab-action color="amber" @click="">B</f7-fab-action>
-                                        <f7-fab-action color="green" @click="">C</f7-fab-action>
+                                        <f7-fab-action color="purple" href="/send_message/">
+                                            <i class="material-icons">send</i>
+                                        </f7-fab-action>
+                                        <f7-fab-action @click="changeAllFilter">
+                                            <i class="material-icons">list</i>
+                                        </f7-fab-action>
+                                        <f7-fab-action color="red" @click="changeAlertFilter">
+                                            <i class="material-icons">warning</i>
+                                        </f7-fab-action>
+                                        <f7-fab-action color="amber" @click="changeWarnFilter">
+                                            <i class="material-icons">error</i>
+                                        </f7-fab-action>
+                                        <f7-fab-action color="green" @click="changeInfoFilter">
+                                            <i class="material-icons">info</i>
+                                        </f7-fab-action>
                                     </f7-fab-actions>
                                     <f7-fab>
                                         <f7-icon icon="icon-plus"></f7-icon>
@@ -23,7 +35,7 @@
                                     </f7-fab>
                                 </f7-fab-speed-dial>
 
-                                <alerts></alerts>
+                                <alerts :filter="msgsFilter"></alerts>
                             </f7-tab>
                             <f7-tab id="profile">
                                 <profile></profile>
@@ -66,9 +78,23 @@
 
     export default {
         data() {
-            return {}
+            return {
+                msgsFilter: 'all'
+            }
         },
         methods: {
+            changeAllFilter() {
+                this.msgsFilter = 'all';
+            },
+            changeAlertFilter() {
+                this.msgsFilter = 'alert';
+            },
+            changeWarnFilter() {
+                this.msgsFilter = 'warn';
+            },
+            changeInfoFilter() {
+                this.msgsFilter = 'info';
+            },
             checkUserData: function () {
                 let username = localStorage.getItem('username');
                 if (username === null || username === "")

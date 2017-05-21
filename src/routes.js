@@ -22,5 +22,9 @@ export default [
   {
     path: '/message/:id',
     component: require('./assets/vue/message.vue')
+  },
+  {
+    path: '/send_message/',
+    component: require('./assets/vue/send_message.vue')
   }
 ]
