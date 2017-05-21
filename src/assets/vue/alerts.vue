@@ -69,6 +69,7 @@
             onF7Init() {
                 this.$f7.virtualList('.virtual-list', {
                     items: this.sortedMsgs,
+                    height: 170, // is this right ?
                     template: '<div class="timeline-item">' +
                     '<div class="timeline-item-date">' +
                     '{{day}} <small>{{month}}</small>' +
@@ -89,7 +90,7 @@
                     '<a href="/message/{{id}}" class="button color-red">View</a>' +
                     '{{/js_compare}}' +
                     '{{#js_compare "this.type === \'warn\'"}}' +
-                    '<a href="/message/{{id}}" class="button color-ember">View</a>' +
+                    '<a href="/message/{{id}}" class="button color-amber">View</a>' +
                     '{{/js_compare}}' +
                     '{{#js_compare "this.type === \'info\'"}}' +
                     '<a href="/message/{{id}}" class="button color-white">View</a>' +
@@ -163,6 +164,6 @@
     }
 
     .timeline .timeline-item-content {
-        width: calc(70% - 20px);
+        width: calc(75% - 20px);
     }
 </style>

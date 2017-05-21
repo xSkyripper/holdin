@@ -1,9 +1,10 @@
 <template>
     <div class="page-content">
 
-        <h2>Home Page Here</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores earum eius impedit in iure mollitia natus nobis perspiciatis sequi tenetur. Delectus deserunt esse hic illo nam numquam optio quos velit?</p>
+        <f7-block-title><h3>Home Title</h3></f7-block-title>
+        <f7-block inner>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque dignissimos ducimus, perspiciatis sint voluptatum. Enim eum exercitationem, nihil nisi obcaecati optio quo ratione sapiente sequi voluptates. Quisquam, reprehenderit vero?
+        </f7-block>
     </div>
     <!-- page-content -->
 </template>

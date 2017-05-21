@@ -13,9 +13,9 @@
                             <f7-tab id="alerts" active>
                                 <f7-fab-speed-dial>
                                     <f7-fab-actions>
-                                        <f7-fab-action color="red" @click="onActionClick">A</f7-fab-action>
-                                        <f7-fab-action color="amber" @click="onActionClick">B</f7-fab-action>
-                                        <f7-fab-action color="green" @click="onActionClick">C</f7-fab-action>
+                                        <f7-fab-action color="red" @click="">A</f7-fab-action>
+                                        <f7-fab-action color="amber" @click="">B</f7-fab-action>
+                                        <f7-fab-action color="green" @click="">C</f7-fab-action>
                                     </f7-fab-actions>
                                     <f7-fab>
                                         <f7-icon icon="icon-plus"></f7-icon>
