@@ -7,18 +7,34 @@
 
                     <f7-list form>
                         <f7-list-item>
+                            <f7-icon slot="media"><i class="material-icons">account_circle</i></f7-icon>
                             <f7-label>Username</f7-label>
                             <f7-input name="username" type="text" placeholder="Username"></f7-input>
                         </f7-list-item>
-                        <f7-list-item smart-select smart-select-searchbar title="Country">
-                            <select name="fruits">
-                                <option value="country1" selected>Country 1</option>
-                                <option value="country2">Country 2</option>
-                                <option value="country3">Country 3</option>
-                                <option value="country4">Country 4</option>
-                                <option value="country5">Country 5</option>
-                            </select>
-                        </f7-list-item>
+
+                        <li>
+
+                            <a href="#" class="item-link smart-select"
+                               data-searchbar="true" data-searchbar-placeholder="Search zones">
+                                <select name="zones">
+                                    <option value="zone1" selected>zone 1 (nearest = city X)</option>
+                                    <option value="zone2">zone 2</option>
+                                    <option value="zone3">zone 3</option>
+                                    <option value="zone4">zone 4</option>
+                                    <option value="zone5">zone 5</option>
+                                </select>
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="icon"><i class="material-icons">location_city</i></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title label">Location area</div>
+                                        <div class="item-after"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- smart-select w/ searchbar -->
                     </f7-list>
 
                     <f7-buttons>
@@ -46,6 +62,9 @@
     }
 </script>
 
-<style lang="sass" scoped>
-
+<style>
+    .smart-select .item-after {
+        padding: 0;
+        margin-left: 0;
+    }
 </style>

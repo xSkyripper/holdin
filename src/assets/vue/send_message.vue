@@ -63,13 +63,15 @@
                 console.log(this.$route);
             },
             sendMsg() {
+                let self = this;
                 console.log(this.username);
                 console.log(this.locationArea);
                 console.log(this.exactLocation);
                 console.log(this.type);
                 console.log(this.details);
-                // SEND MESSAGE OVER PUBSUB
-                this.$router.back();
+                this.$f7.alert('Message will be sent ASAP !', 'Info', function () {
+                    self.$router.back();
+                });
             }
         }
     }
