@@ -49,7 +49,7 @@
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">account_box</i></div>
                         <div class="item-title">Username</div>
-                        <div class="item-after">Alex</div>
+                        <div class="item-after">{{sharedState.username}}</div>
                     </div>
                 </li>
                 <li class="item-content">
@@ -93,6 +93,8 @@
     export default {
         data() {
             return {
+                sharedState: this.$myStore.state,
+                privateState: {},
                 myMessages: [
                     {
                         id: 1,
@@ -138,9 +140,7 @@
             }
         },
         props: {},
-        methods: {
-
-        }
+        methods: {}
     }
 </script>
 

@@ -9,7 +9,7 @@
                         <f7-list-item>
                             <f7-icon slot="media"><i class="material-icons">account_circle</i></f7-icon>
                             <f7-label>Username</f7-label>
-                            <f7-input name="username" type="text" placeholder="Username"></f7-input>
+                            <f7-input v-model="sharedState.username" name="username" type="text" placeholder="Username"></f7-input>
                         </f7-list-item>
 
                         <li>
@@ -51,11 +51,18 @@
 <script>
     export default {
         data() {
-            return {}
+            return {
+                sharedState: this.$myStore.state,
+                privateState: {
+
+                }
+            }
         },
         methods: {
             onStart() {
                 console.log('login:onStart');
+                console.log(this.sharedState.username);
+                this.$myStore.setUsername(this.sharedState.username);
                 this.$f7.closeModal();
             }
         }

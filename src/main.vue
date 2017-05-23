@@ -96,9 +96,7 @@
                 this.msgsFilter = 'info';
             },
             checkUserData: function () {
-                let username = localStorage.getItem('username');
-                if (username === null || username === "")
-                    this.$f7.loginScreen();
+                this.$f7.loginScreen();
             },
             onF7Init: function () {
                 this.checkUserData();

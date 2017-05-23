@@ -17,26 +17,48 @@ import CustomAppStyles from './assets/sass/custom-main.scss'
 import Routes from './routes.js'
 
 import App from './main.vue'
+import myStore from './store.js'
 
 Vue.use(Framework7Vue);
+Vue.use(myStore);
+
+document.addEventListener('deviceready', onDeviceReady, false);
+
+function onDeviceReady() {
+  cordova.plugins.backgroundMode.enable();
+  
+  // setInterval(function () {
+  //   cordova.plugins.notification.local.schedule({
+  //     // id: 1,
+  //     title: "Single Notif Title",
+  //     text: "Single Notification",
+  //     data: {key: "val"}
+  //   });
+  // }, 1000);
+
+  let vm = new Vue({
+    el: '#app',
+    template: '<app/>',
+    mounted() {
+      this.$myStore.initStore();
+    },
+    framework7: {
+      root: '#app',
+      material: true,
+      routes: Routes,
+      // onPageInit: function (app, page) {
+      //
+      // },
+      // onF7Init: function () {
+      //   console.log('f7-init');
+      // }
+    },
+    components: {
+      app: App
+    },
+
+  });
+}
 
 // Init App
-let vm = new Vue({
-  el: '#app',
-  template: '<app/>',
-  framework7: {
-    root: '#app',
-    material: true,
-    routes: Routes,
-    // onPageInit: function (app, page) {
-    //
-    // },
-    // onF7Init: function () {
-    //   console.log('f7-init');
-    // }
-  },
-  components: {
-    app: App
-  },
 
-});
