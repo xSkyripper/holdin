@@ -49,24 +49,17 @@ function onDeviceReady() {
         resetRepo: false
       }, function (res) {
         console.log(res);
-      }, function (err) {
-        console.log(err);
-      });
 
-      this.$myIpfs.ipfsCordova.start(function (res) {
-        console.log(res);
+        self.$myIpfs.ipfsCordova.start(function (res) {
+          console.log(res);
 
-        let ipfsApi = ipfsAPI();
-        console.log(ipfsApi);
+          let ipfsApi = ipfsAPI();
+          console.log(ipfsApi);
 
-        self.$myIpfs.setIpfsApi(ipfsAPI());
-        setTimeout(function() {
-          self.$myIpfs.ipfsApi.id(function (err, identity) {
-            if (err)
-              throw err;
-            console.log(identity);
-          });
-        }, 2000);
+          self.$myIpfs.setIpfsApi(ipfsAPI());
+        }, function (err) {
+          console.log(err);
+        });
 
       }, function (err) {
         console.log(err);

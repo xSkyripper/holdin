@@ -7,7 +7,7 @@
         <f7-block inner>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque dignissimos ducimus, perspiciatis sint voluptatum. Enim eum exercitationem, nihil nisi obcaecati optio quo ratione sapiente sequi voluptates. Quisquam, reprehenderit vero?
 
-            <f7-button @click="addNotif">Notif</f7-button>
+            <f7-button @click="ipfsId">IPFS ID</f7-button>
         </f7-block>
     </div>
     <!-- page-content -->
@@ -20,13 +20,12 @@
         },
         props: [],
         methods: {
-            addNotif() {
-//                this.$f7.addNotification({
-//                    title: 'Notif Test',
-//                    message: 'Shit here'
-//                });
-                navigator.notification.alert("Notif Message", function () {
-                    console.log("notif cb");
+            ipfsId() {
+                console.log(this.$myIpfs.ipfsApi);
+                this.$myIpfs.ipfsApi.id(function (err, iden) {
+                    if (err)
+                        throw err;
+                    console.log(iden);
                 });
             }
         }
