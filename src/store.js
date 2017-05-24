@@ -5,6 +5,7 @@ const store = {
     username: null,
     locationArea: null,
     locationExact: null,
+    //TODO: implement messages with heap for performance
     messages: [],
   },
   initStore() {
@@ -21,6 +22,11 @@ const store = {
     this.debug && console.log('setLocationArea: ', newLocationArea);
 
     localStorage.setItem('locationArea', newLocationArea)
+  },
+  setLocationExact(newLocationExact) {
+    this.debug && console.log('setLocationExact: ', newLocationExact);
+
+    localStorage.setItem('locationExact', newLocationExact);
   }
 };
 
