@@ -36,35 +36,9 @@ function onDeviceReady() {
   let vm = new Vue({
     el: '#app',
     template: '<app/>',
-    mounted() {
-      let self = this;
-      this.$myStore.initStore();
-
-      this.$myIpfs.setIpfsCordova(new CordovaIpfs());
-      console.log(this.$myIpfs);
-
-      this.$myIpfs.ipfsCordova.init({
-        src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
-        appFilesDir: cordova.file.dataDirectory.split("file://")[1] + "files/",
-        resetRepo: false
-      }, function (res) {
-        console.log(res);
-
-        self.$myIpfs.ipfsCordova.start(function (res) {
-          console.log(res);
-
-          let ipfsApi = ipfsAPI();
-          console.log(ipfsApi);
-
-          self.$myIpfs.setIpfsApi(ipfsAPI());
-        }, function (err) {
-          console.log(err);
-        });
-
-      }, function (err) {
-        console.log(err);
-      });
-    },
+    // mounted() {
+    //
+    // },
     framework7: {
       root: '#app',
       material: true,
@@ -72,16 +46,49 @@ function onDeviceReady() {
       // onPageInit: function (app, page) {
       //
       // },
-      // onF7Init: function () {
-      //   console.log('f7-init');
-      // }
     },
     components: {
       app: App
     },
+    methods: {
+      initSystem() {
+        let self = this;
+        this.$myStore.initStore();
+
+        this.$f7.showPreloader("Preparing IPFS ...");
+        this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, function (err) {
+          self.$f7.hidePreloader();
+          if (err) {
+            self.$f7.modal({
+              title: 'HOLDIN Error',
+              text: err,
+              buttons: [
+                {
+                  text: 'Retry',
+                  onClick: function () {
+                    self.initSystem();
+                  }
+                },
+                {
+                  text: 'Quit',
+                  onClick: function () {
+                    console.log('Quit app');
+                  }
+                },
+              ]
+            })
+          } else {
+            self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
+          }
+        });
+        //initIpfs
+      },
+      onF7Init: function () {
+        this.initSystem();
+      }
+    }
 
   });
 }
 
-// Init App
 
