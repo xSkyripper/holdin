@@ -19,11 +19,11 @@ const ipfs = {
         console.log(res);
         try {
           self.ipfsApi = new self.ipfsApi();
-          throw new Error("O eroare");
         } catch (err) {
           cb("IPFS Cannot connect ! Error: " + err);
           return;
         }
+        //TODO: subscribe to pubsub
         cb();
       }, function (err) {
         console.log(err);
@@ -43,3 +43,13 @@ export default {
     Vue.prototype.$myIpfs = ipfs;
   }
 };
+
+
+// setInterval(function () {
+//   cordova.plugins.notification.local.schedule({
+//     // id: 1,
+//     title: "Single Notif Title",
+//     text: "Single Notification",
+//     data: {key: "val"}
+//   });
+// }, 1000);

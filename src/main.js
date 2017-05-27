@@ -22,16 +22,6 @@ Vue.use(myIpfs);
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
-  cordova.plugins.backgroundMode.enable();
-
-  // setInterval(function () {
-  //   cordova.plugins.notification.local.schedule({
-  //     // id: 1,
-  //     title: "Single Notif Title",
-  //     text: "Single Notification",
-  //     data: {key: "val"}
-  //   });
-  // }, 1000);
 
   let vm = new Vue({
     el: '#app',
@@ -53,8 +43,37 @@ function onDeviceReady() {
     methods: {
       initSystem() {
         let self = this;
-        this.$myStore.initStore();
+        // cordova related
+        // enable bg mode
+        cordova.plugins.backgroundMode.enable();
 
+        //check if there's no connection
+        if (navigator.connection.type === 'none') {
+          self.$f7.modal({
+            title: 'HOLDIN Error',
+            text: 'No network connection found ! Please turn on Wifi (recommended) or Mobile Data.',
+            buttons: [
+              {
+                text: 'Retry',
+                onClick: function () {
+                  self.initSystem();
+                }
+              },
+              {
+                text: 'Quit',
+                onClick: function () {
+                  console.log('Quit app');
+                  //TODO exit app
+                }
+              },
+            ]
+          });
+          return;
+        }
+
+        //f7 vue related
+        //TODO: handle store in ipfs module
+        this.$myStore.initStore();
         this.$f7.showPreloader("Preparing IPFS ...");
         this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, function (err) {
           self.$f7.hidePreloader();
@@ -73,10 +92,11 @@ function onDeviceReady() {
                   text: 'Quit',
                   onClick: function () {
                     console.log('Quit app');
+                    //TODO exit app
                   }
                 },
               ]
-            })
+            });
           } else {
             self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
           }

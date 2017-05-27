@@ -7,56 +7,14 @@
 </template>
 
 <script>
-    let timeout;
     export default {
         data() {
             return {
                 vList: null,
-                messages: this.msgGen(100),
-                messages_old: [
-                    {
-                        id: 1,
-                        name: 'Cristea Alex',
-                        location: 'Targusor C1',
-                        type: 'alert',
-                        time: '12:31',
-                        day: '12',
-                        month: '05',
-                        year: '2017'
-                    },
-                    {
-                        id: 2,
-                        name: 'Vasiliu Alexandru',
-                        location: 'Targusor C1',
-                        type: 'warn',
-                        time: '12:03',
-                        day: '12',
-                        month: '05',
-                        year: '2017'
-                    },
-                    {
-                        id: 3,
-                        name: 'Lucian Dan',
-                        location: 'Str. Pepenilor',
-                        type: 'info',
-                        time: '13:45',
-                        day: '11',
-                        month: '05',
-                        year: '2017'
-                    },
-                    {
-                        id: 4,
-                        name: 'Dan Cehan',
-                        location: 'Str. Pepenilor nr 14',
-                        type: 'alert',
-                        time: '22:37',
-                        day: '15',
-                        month: '05',
-                        year: '2017'
-                    }
-                ]
+                messages: this.$myStore.state.messages
             }
         },
+        props: ['filter'],
         watch: {
             filter: function (newFilter) {
                 let filterIndexes = [];
@@ -70,24 +28,16 @@
                     this.vList.filterItems(filterIndexes);
                 }
             },
-            messages_old: function (newMsg) {
+            messages: function (newMsg) {
+                console.log("S-a updatat messages");
                 this.vList.update();
             }
         },
-        computed: {
-            sortedMsgs() {
-                return this.messages_old.sort(function (obj1, obj2) {
-                    let d1 = new Date(obj1.year, obj1.month, obj1.day, obj1.time.split(":")[0], obj1.time.split(":")[1]);
-                    let d2 = new Date(obj2.year, obj2.month, obj2.day, obj2.time.split(":")[0], obj2.time.split(":")[1]);
-                    return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
-                });
-            }
-        },
-        props: ['filter'],
         methods: {
             onF7Init() {
+                let self = this;
                 this.vList = this.$f7.virtualList('.virtual-list', {
-                    items: this.messages_old,
+                    items: self.messages,
                     height: 170, // is this right ?
                     template: '<div class="timeline-item">' +
                     '<div class="timeline-item-date">' +
@@ -130,14 +80,7 @@
             randomIntFromInterval(min, max) {
                 return Math.floor(Math.random() * (max - min + 1) + min);
             },
-            msgGen(max) {
-                let msgs = [];
-                for (let i = 0; i < max; ++i) {
-                    this.addRandomMsg(msgs, i);
-                }
-                return msgs;
-            },
-            addRandomMsg(msgs, i){
+            getRandomMsg(i){
                 let H = String(this.randomIntFromInterval(0, 23));
                 let m = String(this.randomIntFromInterval(0, 59));
                 let day = String(this.randomIntFromInterval(1, 15));
@@ -146,7 +89,8 @@
                 day = day.length < 2 ? '0' + day : day;
 
                 let types = ['alert', 'warn', 'info'];
-                msgs.push({
+
+                return {
                     id: i,
                     name: 'Username ' + i,
                     location: 'Location ' + i,
@@ -155,11 +99,11 @@
                     day: day,
                     month: '05',
                     year: '2017'
-                });
+                };
             },
             addRand() {
-                console.log("msgs old len = " + this.messages_old.length);
-                this.addRandomMsg(this.messages_old, this.messages_old.length + 1);
+                console.log("msgs old len = " + this.messages.length);
+                this.$myStore.addMessage(this.getRandomMsg(this.messages.length + 1));
             }
         }
     }
