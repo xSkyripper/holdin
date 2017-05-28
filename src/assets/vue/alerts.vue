@@ -1,6 +1,6 @@
 <template>
     <div class="page-content">
-        <f7-button @click="addRand">Add Rand</f7-button>
+        <f7-button @click="addRand">Add Rand  {{myLength}}</f7-button>
         <f7-timeline class="virtual-list">
         </f7-timeline>
     </div>
@@ -29,8 +29,15 @@
                 }
             },
             messages: function (newMsg) {
-                console.log("S-a updatat messages");
-                this.vList.update();
+//                this.messages.forEach(function (val) {
+//                    console.log(val.id + "  " + val.day + "-" + val.month + "-" + val.year + "  " + val.time);
+//                });
+                this.vList.replaceAllItems(this.messages);
+            }
+        },
+        computed: {
+            myLength() {
+                return this.messages.length;
             }
         },
         methods: {
@@ -102,8 +109,8 @@
                 };
             },
             addRand() {
-                console.log("msgs old len = " + this.messages.length);
                 this.$myStore.addMessage(this.getRandomMsg(this.messages.length + 1));
+
             }
         }
     }

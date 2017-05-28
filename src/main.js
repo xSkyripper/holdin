@@ -11,15 +11,18 @@ import CustomAppStyles from './assets/sass/custom-main.scss'
 
 import Routes from './routes.js'
 import App from './main.vue'
+
+import ipfsAPI from 'ipfs-api'
 import myStore from './store.js'
 import myIpfs from './ipfs.js'
-import ipfsAPI from 'ipfs-api'
+
 
 Vue.use(Framework7Vue);
 Vue.use(myStore);
 Vue.use(myIpfs);
 
 document.addEventListener('deviceready', onDeviceReady, false);
+
 
 function onDeviceReady() {
 
@@ -44,12 +47,22 @@ function onDeviceReady() {
       initSystem() {
         let self = this;
         // cordova related
-        // enable bg mode
         cordova.plugins.backgroundMode.enable();
+        document.addEventListener('offline', this.initSystem, false);
+        document.addEventListener('pause', this.$myStore.persistData, false);
 
-        //check if there's no connection
+        document.addEventListener('backbutton', function (evt) {
+          evt.preventDefault();
+          console.log(self);
+          try {
+            self.$router.back();
+          } catch (ex) {
+          }
+        }, false);
+
         if (navigator.connection.type === 'none') {
-          self.$f7.modal({
+          self.$myStore.setStatusNetwork(false);
+          window.f7.modal({
             title: 'HOLDIN Error',
             text: 'No network connection found ! Please turn on Wifi (recommended) or Mobile Data.',
             buttons: [
@@ -69,13 +82,13 @@ function onDeviceReady() {
             ]
           });
           return;
+        } else {
+          self.$myStore.setStatusNetwork(navigator.connection.type);
         }
 
         //f7 vue related
-        //TODO: handle store in ipfs module
-        this.$myStore.initStore();
         this.$f7.showPreloader("Preparing IPFS ...");
-        this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, function (err) {
+        this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, this.$myStore, function (err) {
           self.$f7.hidePreloader();
           if (err) {
             self.$f7.modal({
@@ -104,6 +117,7 @@ function onDeviceReady() {
         //initIpfs
       },
       onF7Init: function () {
+        this.$myStore.retrieveData();
         this.initSystem();
       }
     }

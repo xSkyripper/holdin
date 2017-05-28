@@ -1,11 +1,31 @@
-import Heap from 'heap';
-
 function lsSetObj(key, obj) {
   localStorage.setItem(key, JSON.stringify(obj));
 }
 
 function lsGetObj(key) {
   return JSON.parse(localStorage.getItem(key));
+}
+
+function bsLocationOf(element, array, comparer, start, end) {
+  if (array.length === 0)
+    return -1;
+
+  start = start || 0;
+  end = end || array.length;
+  let pivot = (start + end) >> 1;
+
+  let compRes = comparer(element, array[pivot]);
+  if (end - start <= 1)
+    return compRes === -1 ? pivot - 1 : pivot;
+
+  switch (compRes) {
+    case -1:
+      return bsLocationOf(element, array, comparer, start, pivot);
+    case 0:
+      return pivot;
+    case 1:
+      return bsLocationOf(element, array, comparer, pivot, end);
+  }
 }
 
 function cmpMsgDate(obj1, obj2) {
@@ -21,39 +41,79 @@ const store = {
     username: null,
     locationArea: null,
     locationExact: null,
-    messagesHeap: null,
-    messages: []
+    messages: [],
+
+    statusNetwork: false,
+    statusIpfsRepo: false,
+    statusIpfsDaemon: false,
+    statusIpfsPubSub: false
   },
-  initStore() {
-    this.state.username = localStorage.getItem('username');
-    this.state.locationArea = localStorage.getItem('locationArea');
-    this.state.messagesHeap = new Heap(cmpMsgDate);
+  retrieveData() {
+    let self = this;
+    this.state.nodeId = lsGetObj('nodeId');
+    this.state.username = lsGetObj('username');
+    this.state.locationArea = lsGetObj('locationArea');
+    this.state.locationExact = lsGetObj('locationExact');
+
+    let temp = lsGetObj('messages');
+    temp !== null && temp.forEach(function (msg) {
+      self.state.messages.push(msg);
+    });
+
+    console.log(this.state.messages);
+  },
+  persistData(){
+    lsSetObj('nodeId', this.state.nodeId);
+    lsSetObj('username', this.state.username);
+    lsSetObj('locationArea', this.state.locationArea);
+    lsSetObj('locationExact', this.state.locationExact);
+    lsSetObj('messages', this.state.messages);
   },
   setUsername(newUsername) {
     this.debug && console.log('setUsername: ', newUsername);
 
     this.state.username = newUsername;
-    localStorage.setItem('username', newUsername);
   },
   setLocationArea(newLocationArea) {
     this.debug && console.log('setLocationArea: ', newLocationArea);
     // TODO: check if zone in zones array ?
 
     this.state.locationArea = newLocationArea;
-    localStorage.setItem('locationArea', newLocationArea)
   },
   setLocationExact(newLocationExact) {
     this.debug && console.log('setLocationExact: ', newLocationExact);
 
     this.state.locationExact = newLocationExact;
-    localStorage.setItem('locationExact', newLocationExact);
   },
   addMessage(newMessage) {
     this.debug && console.log('addMessage: ', newMessage);
 
-    this.state.messagesHeap.push(newMessage);
-    this.state.messages.push(this.state.messagesHeap.top());
-  }
+    this.state.messages.splice(bsLocationOf(newMessage, this.state.messages, cmpMsgDate) + 1, 0, newMessage);
+
+    this.persistData();
+  },
+
+  setStatusNetwork(newStatus) {
+    this.debug && console.log('setStatusNetwork: ', newStatus);
+
+    this.state.statusNetwork = newStatus;
+  },
+  setStatusIpfsRepo(newStatus) {
+    this.debug && console.log('setStatusIpfsRepo: ', newStatus);
+
+    this.state.statusIpfsRepo = newStatus;
+  },
+  setStatusIpfsDaemon(newStatus) {
+    this.debug && console.log('setStatusIpfsDaemon: ', newStatus);
+
+    this.state.statusIpfsDaemon = newStatus;
+  },
+  setStatusIpfsPubSub(newStatus) {
+    this.debug && console.log('setStatusIpfsPubSub: ', newStatus);
+
+    this.state.statusIpfsPubSub = newStatus;
+  },
+
 };
 
 export default {

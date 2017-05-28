@@ -62,7 +62,6 @@
         "de.appplant.cordova.plugin.local-notification": "git+https://github.com/katzer/cordova-plugin-local-notifications.git",
         "framework7": "^1.5.4",
         "framework7-vue": "^0.8.5",
-        "heap": "^0.2.6",
         "vue": "^2.2.4"
     },
     "cordova": {

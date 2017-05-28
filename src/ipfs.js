@@ -2,11 +2,13 @@ const ipfs = {
   debug: true,
   ipfsCordova: null,
   ipfsApi: null,
+  store: null,
 
-  initIpfs(cipfs, aipfs, cb) {
+  initIpfs(cipfs, aipfs, store, cb) {
     let self = this;
     this.ipfsCordova = cipfs;
     this.ipfsApi = aipfs;
+    this.store = store;
 
     self.ipfsCordova.init({
       src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
@@ -14,24 +16,30 @@ const ipfs = {
       resetRepo: false
     }, function (res) {
       console.log(res);
+      self.store.setStatusIpfsRepo(true);
 
       self.ipfsCordova.start(function (res) {
         console.log(res);
+        self.store.setStatusIpfsDaemon(true);
         try {
           self.ipfsApi = new self.ipfsApi();
         } catch (err) {
+          self.store.setStatusIpfsPubSub(false);
           cb("IPFS Cannot connect ! Error: " + err);
           return;
         }
         //TODO: subscribe to pubsub
+        self.store.setStatusIpfsPubSub(true);
         cb();
       }, function (err) {
         console.log(err);
+        self.store.setStatusIpfsDaemon(false);
         cb(err);
       });
 
     }, function (err) {
       console.log(err);
+      self.store.setStatusIpfsRepo(false);
       cb(err);
     });
   }
