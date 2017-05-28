@@ -1,8 +1,14 @@
 function lsSetObj(key, obj) {
+  console.log("lsSetOb: ");
+  console.log(obj);
+  console.log("lsSetOb: stringify: ");
+  console.log(JSON.stringify(obj));
   localStorage.setItem(key, JSON.stringify(obj));
 }
 
 function lsGetObj(key) {
+  console.log("lsGetObj: parse: ");
+  console.log(localStorage.getItem(key));
   return JSON.parse(localStorage.getItem(key));
 }
 
@@ -50,6 +56,7 @@ const store = {
   },
   retrieveData() {
     let self = this;
+
     this.state.nodeId = lsGetObj('nodeId');
     this.state.username = lsGetObj('username');
     this.state.locationArea = lsGetObj('locationArea');
@@ -59,15 +66,16 @@ const store = {
     temp !== null && temp.forEach(function (msg) {
       self.state.messages.push(msg);
     });
-
-    console.log(this.state.messages);
   },
   persistData(){
-    lsSetObj('nodeId', this.state.nodeId);
-    lsSetObj('username', this.state.username);
-    lsSetObj('locationArea', this.state.locationArea);
-    lsSetObj('locationExact', this.state.locationExact);
-    lsSetObj('messages', this.state.messages);
+    this.debug && console.log('persistData: ');
+    let self = this;
+
+    lsSetObj('nodeId', self.state.nodeId);
+    lsSetObj('username', self.state.username);
+    lsSetObj('locationArea', self.state.locationArea);
+    lsSetObj('locationExact', self.state.locationExact);
+    lsSetObj('messages', self.state.messages);
   },
   setUsername(newUsername) {
     this.debug && console.log('setUsername: ', newUsername);

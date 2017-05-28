@@ -49,7 +49,9 @@ function onDeviceReady() {
         // cordova related
         cordova.plugins.backgroundMode.enable();
         document.addEventListener('offline', this.initSystem, false);
-        document.addEventListener('pause', this.$myStore.persistData, false);
+        document.addEventListener('pause', function () {
+          self.$myStore.persistData();
+        }, false);
 
         document.addEventListener('backbutton', function (evt) {
           evt.preventDefault();
