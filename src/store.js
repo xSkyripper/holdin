@@ -1,17 +1,3 @@
-function lsSetObj(key, obj) {
-  console.log("lsSetOb: ");
-  console.log(obj);
-  console.log("lsSetOb: stringify: ");
-  console.log(JSON.stringify(obj));
-  localStorage.setItem(key, JSON.stringify(obj));
-}
-
-function lsGetObj(key) {
-  console.log("lsGetObj: parse: ");
-  console.log(localStorage.getItem(key));
-  return JSON.parse(localStorage.getItem(key));
-}
-
 function bsLocationOf(element, array, comparer, start, end) {
   if (array.length === 0)
     return -1;
@@ -40,13 +26,28 @@ function cmpMsgDate(obj1, obj2) {
   return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
 }
 
+function lsSetObj(key, obj) {
+  console.log("lsSetOb: ");
+  console.log(obj);
+  console.log("lsSetOb: stringify: ");
+  console.log(JSON.stringify(obj));
+  localStorage.setItem(key, JSON.stringify(obj));
+}
+
+function lsGetObj(key) {
+  console.log("lsGetObj: parse: ");
+  console.log(localStorage.getItem(key));
+  return JSON.parse(localStorage.getItem(key));
+}
+
+
 const store = {
   debug: true,
   state: {
     nodeId: null,
     username: null,
-    locationArea: null,
     locationExact: null,
+    locationZones: [],
     messages: [],
 
     statusNetwork: false,
@@ -54,51 +55,83 @@ const store = {
     statusIpfsDaemon: false,
     statusIpfsPubSub: false
   },
+
   retrieveData() {
+    this.debug && console.log('retrieveData: ');
     let self = this;
 
     this.state.nodeId = lsGetObj('nodeId');
     this.state.username = lsGetObj('username');
-    this.state.locationArea = lsGetObj('locationArea');
     this.state.locationExact = lsGetObj('locationExact');
 
-    let temp = lsGetObj('messages');
+    let temp = lsGetObj('locationZones');
+    temp !== null && temp.forEach(function (zone) {
+      self.state.locationZones.push(zone);
+    });
+
+    temp = lsGetObj('messages');
     temp !== null && temp.forEach(function (msg) {
       self.state.messages.push(msg);
     });
   },
-  persistData(){
+  persistData() {
     this.debug && console.log('persistData: ');
     let self = this;
 
     lsSetObj('nodeId', self.state.nodeId);
     lsSetObj('username', self.state.username);
-    lsSetObj('locationArea', self.state.locationArea);
     lsSetObj('locationExact', self.state.locationExact);
+    lsSetObj('locationZones', self.state.locationZones);
     lsSetObj('messages', self.state.messages);
+  },
+
+  setNodeId(newNodeId) {
+    this.debug && console.log('setNodeId: ', newNodeId);
+
+    this.state.nodeId = newNodeId;
   },
   setUsername(newUsername) {
     this.debug && console.log('setUsername: ', newUsername);
 
     this.state.username = newUsername;
   },
-  setLocationArea(newLocationArea) {
-    this.debug && console.log('setLocationArea: ', newLocationArea);
-    // TODO: check if zone in zones array ?
-
-    this.state.locationArea = newLocationArea;
-  },
   setLocationExact(newLocationExact) {
     this.debug && console.log('setLocationExact: ', newLocationExact);
 
     this.state.locationExact = newLocationExact;
   },
+
+  addLocationZone(newZone) {
+    this.debug && console.log('addLocationZone: ', newZone);
+
+    let exists = false;
+    this.state.locationZones.forEach(function (zone, ind) {
+      zone.id === newZone.id && (exists = true);
+    });
+
+    !exists && this.state.locationZones.push(newZone)
+  },
+  remLocationZone(zoneId) {
+    this.debug && console.log('remLocationZone: ', zoneId);
+    let self = this;
+
+    self.state.locationZones.forEach(function (zone, ind) {
+      zone.id === zoneId && self.state.locationZones.splice(ind, 1)
+    });
+  },
+
   addMessage(newMessage) {
     this.debug && console.log('addMessage: ', newMessage);
 
     this.state.messages.splice(bsLocationOf(newMessage, this.state.messages, cmpMsgDate) + 1, 0, newMessage);
+  },
+  remMessage(msgId) {
+    this.debug && console.log('remMessage: ', msgId);
+    let self = this;
 
-    this.persistData();
+    self.state.messages.forEach(function (msg, ind) {
+      msg.id === msgId && self.state.messages.splice(ind, 1)
+    });
   },
 
   setStatusNetwork(newStatus) {
