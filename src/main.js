@@ -120,6 +120,7 @@ function onDeviceReady() {
       },
       onF7Init: function () {
         this.$myStore.retrieveData();
+        this.$myStore.startLocationWatcher();
         this.initSystem();
       }
     }

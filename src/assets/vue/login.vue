@@ -13,7 +13,6 @@
                         </f7-list-item>
 
                         <li>
-
                             <a href="#" class="item-link smart-select"
                                data-searchbar="true" data-searchbar-placeholder="Search zones">
                                 <select name="zones">
@@ -28,7 +27,7 @@
                                         <i class="icon"><i class="material-icons">location_city</i></i>
                                     </div>
                                     <div class="item-inner">
-                                        <div class="item-title label">Location area</div>
+                                        <div class="item-title label">Location Zones</div>
                                         <div class="item-after"></div>
                                     </div>
                                 </div>

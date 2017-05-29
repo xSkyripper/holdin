@@ -40,15 +40,19 @@ function lsGetObj(key) {
   return JSON.parse(localStorage.getItem(key));
 }
 
+import Zones from './zones.js'
+import Mgrs from 'mgrs'
 
 const store = {
   debug: true,
   state: {
     nodeId: null,
     username: null,
-    locationExact: null,
+    locationExact: {lon: null, lat: null},
+    locationWatcher: null,
     locationZones: [],
     messages: [],
+
 
     statusNetwork: false,
     statusIpfsRepo: false,
@@ -59,12 +63,16 @@ const store = {
   retrieveData() {
     this.debug && console.log('retrieveData: ');
     let self = this;
+    let temp;
 
     this.state.nodeId = lsGetObj('nodeId');
     this.state.username = lsGetObj('username');
-    this.state.locationExact = lsGetObj('locationExact');
 
-    let temp = lsGetObj('locationZones');
+    temp = lsGetObj('locationExact');
+    temp !== null && temp !== undefined &&
+    (this.state.locationExact = temp);
+
+    temp = lsGetObj('locationZones');
     temp !== null && temp.forEach(function (zone) {
       self.state.locationZones.push(zone);
     });
@@ -118,6 +126,29 @@ const store = {
     self.state.locationZones.forEach(function (zone, ind) {
       zone.id === zoneId && self.state.locationZones.splice(ind, 1)
     });
+  },
+  startLocationWatcher() {
+    let self = this;
+
+    this.state.locationWatcher = navigator.geolocation.watchPosition(function (pos) {
+      self.state.locationExact.lon = pos.coords.longitude;
+      self.state.locationExact.lat = pos.coords.latitude;
+    }, function (err) {
+      window.f7.alert('Location Error ! code: ' + err.code + '\n' +
+        'message: ' + err.message + '\n');
+    }, {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 10000
+    });
+
+    setInterval(function() {
+      let zone = Mgrs.forward([self.state.locationExact.lon, self.state.locationExact.lat], 1);
+      zone = zone.substr(0, zone.length - 2);
+
+      console.log(zone);
+      console.log(Zones[zone].sha1Hash);
+    }, 5000);
   },
 
   addMessage(newMessage) {
