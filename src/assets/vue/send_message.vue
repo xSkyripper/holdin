@@ -14,14 +14,14 @@
 
             <f7-list-item>
                 <f7-icon slot="media"><i class="material-icons">location_city</i></f7-icon>
-                <f7-label floating>Location area</f7-label>
-                <f7-input disabled v-model="locationArea" type="text" placeholder="Name"></f7-input>
+                <f7-label floating>Location zone</f7-label>
+                <f7-input disabled v-model="locationArea" type="text" placeholder="zone"></f7-input>
             </f7-list-item>
 
             <f7-list-item>
                 <f7-icon slot="media"><i class="material-icons">location_on</i></f7-icon>
-                <f7-label floating>Exact location</f7-label>
-                <f7-input disabled v-model="exactLocation" type="text" placeholder="Name"></f7-input>
+                <f7-label floating>Location coords</f7-label>
+                <f7-input disabled v-model="exactLocation" type="text" placeholder="coords"></f7-input>
             </f7-list-item>
 
             <f7-list-item>

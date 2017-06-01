@@ -90,32 +90,33 @@ function onDeviceReady() {
 
         //f7 vue related
         this.$f7.showPreloader("Preparing IPFS ...");
-        this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, this.$myStore, function (err) {
-          self.$f7.hidePreloader();
-          if (err) {
-            self.$f7.modal({
-              title: 'HOLDIN Error',
-              text: err,
-              buttons: [
-                {
-                  text: 'Retry',
-                  onClick: function () {
-                    self.initSystem();
-                  }
-                },
-                {
-                  text: 'Quit',
-                  onClick: function () {
-                    console.log('Quit app');
-                    //TODO exit app
-                  }
-                },
-              ]
-            });
-          } else {
-            self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
-          }
-        });
+        this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, this.$myStore,
+          function (err) {
+            self.$f7.hidePreloader();
+            if (err) {
+              self.$f7.modal({
+                title: 'HOLDIN Error',
+                text: err,
+                buttons: [
+                  {
+                    text: 'Retry',
+                    onClick: function () {
+                      self.initSystem();
+                    }
+                  },
+                  {
+                    text: 'Quit',
+                    onClick: function () {
+                      console.log('Quit app');
+                      //TODO exit app
+                    }
+                  },
+                ]
+              });
+            } else {
+              self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
+            }
+          });
         //initIpfs
       },
       onF7Init: function () {

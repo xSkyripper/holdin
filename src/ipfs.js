@@ -28,6 +28,7 @@ const ipfs = {
           cb("IPFS Cannot connect ! Error: " + err);
           return;
         }
+        //TODO: get id to store
         //TODO: subscribe to pubsub
         self.store.setStatusIpfsPubSub(true);
         cb();

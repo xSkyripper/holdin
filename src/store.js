@@ -48,11 +48,13 @@ const store = {
   state: {
     nodeId: null,
     username: null,
-    locationExact: {lon: null, lat: null},
-    locationWatcher: null,
-    locationZones: [],
     messages: [],
 
+    locationZones: [],
+    locationExact: {lon: null, lat: null},
+    locationWatcher: null,
+    zoneUpdater: undefined,
+    zoneUpdaterDelay: 5,
 
     statusNetwork: false,
     statusIpfsRepo: false,
@@ -109,25 +111,35 @@ const store = {
     this.state.locationExact = newLocationExact;
   },
 
-  addLocationZone(newZone) {
-    this.debug && console.log('addLocationZone: ', newZone);
-
-    let exists = false;
-    this.state.locationZones.forEach(function (zone, ind) {
-      zone.id === newZone.id && (exists = true);
-    });
-
-    !exists && this.state.locationZones.push(newZone)
-  },
-  remLocationZone(zoneId) {
-    this.debug && console.log('remLocationZone: ', zoneId);
+  resetZoneUpdater() {
+    this.debug && console.log('resetZoneUpdater: ');
     let self = this;
 
-    self.state.locationZones.forEach(function (zone, ind) {
-      zone.id === zoneId && self.state.locationZones.splice(ind, 1)
-    });
+    this.state.zoneUpdater !== undefined && clearInterval(this.state.zoneUpdater);
+
+    this.state.zoneUpdater = setInterval(function () {
+        let zoneId = Mgrs.forward([self.state.locationExact.lon, self.state.locationExact.lat], 1);
+        zoneId = zoneId.substr(0, zoneId.length - 2);
+        self.addLocationZone(Zones[zoneId]);
+        console.log(self.state.zoneUpdaterDelay);
+
+        console.log(Zones[zoneId]);
+      },
+      self.state.zoneUpdaterDelay * 60000);
+  },
+  setZoneUpdaterDelay(newZoneUpdaterDelay) {
+    this.debug && console.log('setZoneUpdaterDelay: ' + newZoneUpdaterDelay);
+
+    if (this.state.zoneUpdaterDelay <= 0) {
+      this.state.zoneUpdaterDelay = 5;
+    } else {
+      this.state.zoneUpdaterDelay = newZoneUpdaterDelay;
+    }
+
+    this.resetZoneUpdater();
   },
   startLocationWatcher() {
+    this.debug && console.log('startLocationWatcher: ');
     let self = this;
 
     this.state.locationWatcher = navigator.geolocation.watchPosition(function (pos) {
@@ -142,13 +154,24 @@ const store = {
       maximumAge: 10000
     });
 
-    setInterval(function() {
-      let zone = Mgrs.forward([self.state.locationExact.lon, self.state.locationExact.lat], 1);
-      zone = zone.substr(0, zone.length - 2);
+    this.resetZoneUpdater();
+  },
+  addLocationZone(newZone) {
+    this.debug && console.log('addLocationZone: ', newZone);
 
-      console.log(zone);
-      console.log(Zones[zone].sha1Hash);
-    }, 5000);
+    let exists = false;
+    this.state.locationZones.forEach(function (zone, ind) {
+      zone.name === newZone.name && (exists = true);
+    });
+    !exists && this.state.locationZones.push(newZone)
+  },
+  remLocationZone(zoneName) {
+    this.debug && console.log('remLocationZone: ', zoneName);
+    let self = this;
+
+    self.state.locationZones.forEach(function (zone, ind) {
+      zone.name === zoneName && self.state.locationZones.splice(ind, 1)
+    });
   },
 
   addMessage(newMessage) {

@@ -23,16 +23,16 @@
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_city</i></div>
-                        <div class="item-title">Location area</div>
-                        <div class="item-after">XYZ</div>
+                        <div class="item-title">Location zone</div>
+                        <div class="item-after">zone</div>
                     </div>
                 </li>
 
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_on</i></div>
-                        <div class="item-title">Exact location</div>
-                        <div class="item-after">11 22 33</div>
+                        <div class="item-title">Location coords</div>
+                        <div class="item-after">11 22</div>
                     </div>
                 </li>
 

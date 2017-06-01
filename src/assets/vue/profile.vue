@@ -76,15 +76,15 @@
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_city</i></div>
-                        <div class="item-title">Location area</div>
-                        <div class="item-after">{{sharedState.locationArea}}</div>
+                        <div class="item-title">Location zones</div>
+                        <div class="item-after">zones</div>
                     </div>
                 </li>
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_on</i></div>
-                        <div class="item-title">Location coordinates</div>
-                        <div class="item-after">{{sharedState.locationExact}}</div>
+                        <div class="item-title">Location coords</div>
+                        <div class="item-after">coords</div>
                     </div>
                 </li>
             </f7-list-group>
