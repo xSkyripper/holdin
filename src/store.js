@@ -20,6 +20,12 @@ function bsLocationOf(element, array, comparer, start, end) {
   }
 }
 
+function sha1Hash(txt) {
+  let shasum = Crypto.createHash('sha1');
+  shasum.update(txt);
+  return shasum.digest('hex');
+}
+
 function cmpMsgDate(obj1, obj2) {
   let d1 = new Date(obj1.year, obj1.month, obj1.day, obj1.time.split(":")[0], obj1.time.split(":")[1]);
   let d2 = new Date(obj2.year, obj2.month, obj2.day, obj2.time.split(":")[0], obj2.time.split(":")[1]);
@@ -27,20 +33,20 @@ function cmpMsgDate(obj1, obj2) {
 }
 
 function lsSetObj(key, obj) {
-  console.log("lsSetOb: ");
+  console.log("lsSetOb: " + key);
   console.log(obj);
-  console.log("lsSetOb: stringify: ");
+  console.log("lsSetOb: stringify: " + key);
   console.log(JSON.stringify(obj));
   localStorage.setItem(key, JSON.stringify(obj));
 }
 
 function lsGetObj(key) {
-  console.log("lsGetObj: parse: ");
+  console.log("lsGetObj: parse: " + key);
   console.log(localStorage.getItem(key));
   return JSON.parse(localStorage.getItem(key));
 }
 
-import Zones from './zones.js'
+import Crypto from 'crypto'
 import Mgrs from 'mgrs'
 
 const store = {
@@ -50,13 +56,14 @@ const store = {
     username: null,
     messages: [],
 
-    locationZones: [],
+    locationZone: {zoneId: null, zoneHash: null},
     locationExact: {lon: null, lat: null},
     locationWatcher: null,
     zoneUpdater: undefined,
     zoneUpdaterDelay: 5,
 
     statusNetwork: false,
+    statusLocation: false,
     statusIpfsRepo: false,
     statusIpfsDaemon: false,
     statusIpfsPubSub: false
@@ -70,14 +77,13 @@ const store = {
     this.state.nodeId = lsGetObj('nodeId');
     this.state.username = lsGetObj('username');
 
+    temp = lsGetObj('locationZone');
+    temp !== null && temp !== undefined &&
+    (this.state.locationZone = temp);
+
     temp = lsGetObj('locationExact');
     temp !== null && temp !== undefined &&
     (this.state.locationExact = temp);
-
-    temp = lsGetObj('locationZones');
-    temp !== null && temp.forEach(function (zone) {
-      self.state.locationZones.push(zone);
-    });
 
     temp = lsGetObj('messages');
     temp !== null && temp.forEach(function (msg) {
@@ -91,7 +97,7 @@ const store = {
     lsSetObj('nodeId', self.state.nodeId);
     lsSetObj('username', self.state.username);
     lsSetObj('locationExact', self.state.locationExact);
-    lsSetObj('locationZones', self.state.locationZones);
+    lsSetObj('locationZone', self.state.locationZone);
     lsSetObj('messages', self.state.messages);
   },
 
@@ -105,10 +111,16 @@ const store = {
 
     this.state.username = newUsername;
   },
-  setLocationExact(newLocationExact) {
-    this.debug && console.log('setLocationExact: ', newLocationExact);
+  setLocationExact(newLocationExactLon, newLocationExactLat) {
+    this.debug && console.log('setLocationExact: ', newLocationExactLon, newLocationExactLat);
 
-    this.state.locationExact = newLocationExact;
+    this.state.locationExact.lon = newLocationExactLon;
+    this.state.locationExact.lat = newLocationExactLat;
+  },
+  setLocationZone(newLocationZone) {
+    this.debug && console.log('setLocationZone: ', newLocationZone);
+
+    this.state.locationZone = newLocationZone;
   },
 
   resetZoneUpdater() {
@@ -117,14 +129,24 @@ const store = {
 
     this.state.zoneUpdater !== undefined && clearInterval(this.state.zoneUpdater);
 
-    this.state.zoneUpdater = setInterval(function () {
-        let zoneId = Mgrs.forward([self.state.locationExact.lon, self.state.locationExact.lat], 1);
-        zoneId = zoneId.substr(0, zoneId.length - 2);
-        self.addLocationZone(Zones[zoneId]);
-        console.log(self.state.zoneUpdaterDelay);
+    function setZone() {
+      let zone = {zoneId: null, zoneHash: null};
+      zone.zoneId = Mgrs.forward([
+        self.state.locationExact.lon,
+        self.state.locationExact.lat
+      ], 1);
+      zone.zoneId = zone.zoneId.substr(0, zone.zoneId.length - 2);
+      zone.zoneHash = sha1Hash(zone.zoneId);
 
-        console.log(Zones[zoneId]);
-      },
+      // only update if the zone is different
+      self.state.zoneHash !== zone.zoneHash && self.setLocationZone(zone);
+
+      console.log(self.state.zoneUpdaterDelay);
+      self.debug && console.log('resetZoneUpdater: ', zone);
+    }
+
+    setZone();
+    this.state.zoneUpdater = setInterval(setZone,
       self.state.zoneUpdaterDelay * 60000);
   },
   setZoneUpdaterDelay(newZoneUpdaterDelay) {
@@ -143,9 +165,10 @@ const store = {
     let self = this;
 
     this.state.locationWatcher = navigator.geolocation.watchPosition(function (pos) {
-      self.state.locationExact.lon = pos.coords.longitude;
-      self.state.locationExact.lat = pos.coords.latitude;
+      self.setLocationExact(pos.coords.longitude, pos.coords.latitude);
+      self.setStatusLocation(true);
     }, function (err) {
+      self.setStatusLocation(false);
       window.f7.alert('Location Error ! code: ' + err.code + '\n' +
         'message: ' + err.message + '\n');
     }, {
@@ -156,23 +179,7 @@ const store = {
 
     this.resetZoneUpdater();
   },
-  addLocationZone(newZone) {
-    this.debug && console.log('addLocationZone: ', newZone);
 
-    let exists = false;
-    this.state.locationZones.forEach(function (zone, ind) {
-      zone.name === newZone.name && (exists = true);
-    });
-    !exists && this.state.locationZones.push(newZone)
-  },
-  remLocationZone(zoneName) {
-    this.debug && console.log('remLocationZone: ', zoneName);
-    let self = this;
-
-    self.state.locationZones.forEach(function (zone, ind) {
-      zone.name === zoneName && self.state.locationZones.splice(ind, 1)
-    });
-  },
 
   addMessage(newMessage) {
     this.debug && console.log('addMessage: ', newMessage);
@@ -188,10 +195,16 @@ const store = {
     });
   },
 
+
   setStatusNetwork(newStatus) {
     this.debug && console.log('setStatusNetwork: ', newStatus);
 
     this.state.statusNetwork = newStatus;
+  },
+  setStatusLocation(newStatus) {
+    this.debug && console.log('setStatusLocation: ', newStatus);
+
+    this.state.statusLocation = newStatus;
   },
   setStatusIpfsRepo(newStatus) {
     this.debug && console.log('setStatusIpfsRepo: ', newStatus);

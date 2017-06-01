@@ -59,6 +59,7 @@
         "cordova-plugin-ipfs": "git+https://github.com/xSkyripper/cordova-plugin-ipfs.git",
         "cordova-plugin-network-information": "~1.3.3",
         "cordova-plugin-whitelist": "1",
+        "crypto": "0.0.3",
         "de.appplant.cordova.plugin.local-notification": "git+https://github.com/katzer/cordova-plugin-local-notifications.git",
         "framework7": "^1.5.4",
         "framework7-vue": "^0.8.5",

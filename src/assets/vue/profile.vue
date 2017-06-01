@@ -23,6 +23,20 @@
                 </li>
                 <li class="item-content">
                     <div class="item-inner">
+                        <div class="item-media"><i class="material-icons">location_on</i></div>
+                        <div class="item-title">Location</div>
+                        <div class="item-after">
+                            <span v-if="sharedState.statusLocation" class="color-green">
+                                Online
+                            </span>
+                            <span class="color-red" v-else>
+                                Offline
+                            </span>
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
                         <div class="item-media"><i class="material-icons">archive</i></div>
                         <div class="item-title">IPFS Repo</div>
                         <div class="item-after">
@@ -76,15 +90,15 @@
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_city</i></div>
-                        <div class="item-title">Location zones</div>
-                        <div class="item-after">zones</div>
+                        <div class="item-title">Location zone</div>
+                        <div class="item-after">{{sharedState.locationZone.zoneId}}</div>
                     </div>
                 </li>
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_on</i></div>
-                        <div class="item-title">Location coords</div>
-                        <div class="item-after">coords</div>
+                        <div class="item-title">Location exact</div>
+                        <div class="item-after">{{sharedState.locationExact.lon}}, {{sharedState.locationExact.lat}}</div>
                     </div>
                 </li>
             </f7-list-group>
