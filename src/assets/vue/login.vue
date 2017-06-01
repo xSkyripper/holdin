@@ -14,33 +14,25 @@
                         </f7-list-item>
 
                         <f7-list-item>
+                            <f7-icon slot="media"><i class="material-icons">speaker_notes_off</i></f7-icon>
+                            <f7-label>Delete old messages in ... (days)</f7-label>
+                            <f7-input v-model="sharedState.messagesTTL" name="messagesTTL" type="number"
+                                      placeholder="Messages Time To Live"></f7-input>
+                        </f7-list-item>
+
+                        <f7-list-item>
+                            <f7-icon slot="media"><i class="material-icons">timer</i></f7-icon>
+                            <f7-label>Update zone in ... (minutes)</f7-label>
+                            <f7-input v-model="sharedState.zoneUpdaterDelay" name="zoneUpdaterDelay" type="number"
+                                      placeholder="Zone Updater Delay"></f7-input>
+                        </f7-list-item>
+
+                        <f7-list-item>
                             <f7-icon slot="media"><i class="material-icons">location_on</i></f7-icon>
                             <f7-label>Location zone</f7-label>
                             <f7-input disabled v-model="sharedState.locationZone.zoneId" type="text"></f7-input>
                         </f7-list-item>
 
-                        <!--<li>-->
-                        <!--<a href="#" class="item-link smart-select"-->
-                        <!--data-searchbar="true" data-searchbar-placeholder="Search zones">-->
-                        <!--<select name="zones">-->
-                        <!--<option value="zone1" selected>zone 1 (nearest = city X)</option>-->
-                        <!--<option value="zone2">zone 2</option>-->
-                        <!--<option value="zone3">zone 3</option>-->
-                        <!--<option value="zone4">zone 4</option>-->
-                        <!--<option value="zone5">zone 5</option>-->
-                        <!--</select>-->
-                        <!--<div class="item-content">-->
-                        <!--<div class="item-media">-->
-                        <!--<i class="icon"><i class="material-icons">location_city</i></i>-->
-                        <!--</div>-->
-                        <!--<div class="item-inner">-->
-                        <!--<div class="item-title label">Location Zones</div>-->
-                        <!--<div class="item-after"></div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</a>-->
-                        <!--</li>-->
-                        <!--&lt;!&ndash; smart-select w/ searchbar &ndash;&gt;-->
                     </f7-list>
 
                     <f7-buttons>
@@ -65,8 +57,8 @@
         methods: {
             onStart() {
                 console.log('login:onStart');
-                console.log(this.sharedState.username);
-                this.$myStore.setUsername(this.sharedState.username);
+//                console.log(this.sharedState.username);
+//                this.$myStore.setUsername(this.sharedState.username);
                 this.$f7.closeModal();
             }
         }

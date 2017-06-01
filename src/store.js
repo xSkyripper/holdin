@@ -55,6 +55,7 @@ const store = {
     nodeId: null,
     username: null,
     messages: [],
+    messagesTTL: 1,
 
     locationZone: {zoneId: null, zoneHash: null},
     locationExact: {lon: null, lat: null},
@@ -81,6 +82,10 @@ const store = {
     temp !== null && temp !== undefined &&
     (this.state.locationZone = temp);
 
+    temp = lsGetObj('zoneUpdaterDelay');
+    temp !== null && temp !== undefined &&
+    (this.state.zoneUpdaterDelay = temp);
+
     temp = lsGetObj('locationExact');
     temp !== null && temp !== undefined &&
     (this.state.locationExact = temp);
@@ -89,6 +94,10 @@ const store = {
     temp !== null && temp.forEach(function (msg) {
       self.state.messages.push(msg);
     });
+
+    temp = lsGetObj('messagesTTL');
+    temp !== null && temp !== undefined &&
+    (this.state.messagesTTL = temp);
   },
   persistData() {
     this.debug && console.log('persistData: ');
@@ -96,9 +105,11 @@ const store = {
 
     lsSetObj('nodeId', self.state.nodeId);
     lsSetObj('username', self.state.username);
-    lsSetObj('locationExact', self.state.locationExact);
     lsSetObj('locationZone', self.state.locationZone);
+    lsSetObj('zoneUpdaterDelay', self.state.zoneUpdaterDelay);
+    lsSetObj('locationExact', self.state.locationExact);
     lsSetObj('messages', self.state.messages);
+    lsSetObj('messagesTTL', self.state.messagesTTL);
   },
 
   setNodeId(newNodeId) {
@@ -180,7 +191,11 @@ const store = {
     this.resetZoneUpdater();
   },
 
+  setMessagesTTL(newMsgTTL) {
+    this.debug && console.log('setMessagesTTL: ', newMsgTTL);
 
+    this.state.messagesTTL = newMsgTTL;
+  },
   addMessage(newMessage) {
     this.debug && console.log('addMessage: ', newMessage);
 
