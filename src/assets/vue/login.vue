@@ -57,8 +57,6 @@
         methods: {
             onStart() {
                 console.log('login:onStart');
-//                console.log(this.sharedState.username);
-//                this.$myStore.setUsername(this.sharedState.username);
                 this.$f7.closeModal();
             }
         }
@@ -66,8 +64,5 @@
 </script>
 
 <style>
-    .smart-select .item-after {
-        padding: 0;
-        margin-left: 0;
-    }
+
 </style>

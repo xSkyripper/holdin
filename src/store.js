@@ -98,6 +98,7 @@ const store = {
     temp = lsGetObj('messagesTTL');
     temp !== null && temp !== undefined &&
     (this.state.messagesTTL = temp);
+    //TODO: remove "dead" messages
   },
   persistData() {
     this.debug && console.log('persistData: ');

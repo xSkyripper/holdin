@@ -4,6 +4,10 @@ const ipfs = {
   ipfsApi: null,
   store: null,
 
+  state: {
+    zoneHash: null
+  },
+
   initIpfs(cipfs, aipfs, store, cb) {
     let self = this;
     this.ipfsCordova = cipfs;
@@ -28,8 +32,17 @@ const ipfs = {
           cb("IPFS Cannot connect ! Error: " + err);
           return;
         }
-        //TODO: get id to store
+
+        self.ipfsApi.id(function (err, iden) {
+          if (err)
+            cb("IPFS cannot fetch IPFS ID ! Error: " + err);
+          else {
+            self.store.setNodeId(iden.id);
+          }
+        });
+
         //TODO: subscribe to pubsub
+        self.updateZone();
         self.store.setStatusIpfsPubSub(true);
         cb();
       }, function (err) {
@@ -43,7 +56,26 @@ const ipfs = {
       self.store.setStatusIpfsRepo(false);
       cb(err);
     });
-  }
+  },
+
+  testMsgRcvr(msg) {
+    console.log(msg.data.toString());
+  },
+
+  updateZone() {
+    console.log("updateZone: " + this.state.zoneHash + " => " + this.store.state.locationZone.zoneHash);
+    let self = this;
+
+    setInterval(function () {
+      if (self.state.zoneHash !== self.store.state.locationZone.zoneHash) {
+        console.log("updateZone: unsub: " + self.state.zoneHash);
+        self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.testMsgRcvr);
+        console.log("updateZone: sub: " + self.store.state.locationZone.zoneHash);
+        self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.testMsgRcvr);
+        self.state.zoneHash = self.store.state.locationZone.zoneHash;
+      }
+    }, 1000);
+  },
 };
 
 export default {

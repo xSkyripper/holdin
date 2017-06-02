@@ -21,7 +21,7 @@
         props: [],
         methods: {
             ipfsId() {
-                console.log(this.$myIpfs.ipfsApi);
+//                console.log(this.$myIpfs.ipfsApi);
                 this.$myIpfs.ipfsApi.id(function (err, iden) {
                     if (err)
                         throw err;
