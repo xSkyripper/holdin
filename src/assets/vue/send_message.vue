@@ -97,7 +97,6 @@
                 this.$myIpfs.ipfsApi.object.put(obj, function (err, node) {
                     if (err)
                         throw err;
-                    console.log(node.toJSON().multihash);
 
                     self.$myIpfs.ipfsApi.pubsub.publish(
                         self.$myStore.state.locationZone.zoneHash,

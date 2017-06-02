@@ -57,8 +57,17 @@ const ipfs = {
     });
   },
 
-  testMsgRcvr(msg) {
-    console.log(msg.data.toString());
+  testMsgRcvr(objMsgHash) {
+    console.log("testMsgRcvr:");
+    let msgHash = objMsgHash.data.toString();
+    console.log(msgHash);
+
+    this.ipfsApi.object.data(msgHash, function (err, data) {
+      if (err)
+        throw err;
+
+      console.log(JSON.parse(data.toString()));
+    });
   },
 
   updateZone() {
@@ -68,9 +77,9 @@ const ipfs = {
     setInterval(function () {
       if (self.state.zoneHash !== self.store.state.locationZone.zoneHash) {
         console.log("updateZone: unsub: " + self.state.zoneHash);
-        self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.testMsgRcvr);
+        self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.testMsgRcvr.bind(self));
         console.log("updateZone: sub: " + self.store.state.locationZone.zoneHash);
-        self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.testMsgRcvr);
+        self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.testMsgRcvr.bind(self));
         self.state.zoneHash = self.store.state.locationZone.zoneHash;
       }
     }, 1000);
