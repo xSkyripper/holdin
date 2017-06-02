@@ -124,7 +124,7 @@ const store = {
     this.state.username = newUsername;
   },
   setLocationExact(newLocationExactLon, newLocationExactLat) {
-    this.debug && console.log('setLocationExact: ', newLocationExactLon, newLocationExactLat);
+    // this.debug && console.log('setLocationExact: ', newLocationExactLon, newLocationExactLat);
 
     this.state.locationExact.lon = newLocationExactLon;
     this.state.locationExact.lat = newLocationExactLat;

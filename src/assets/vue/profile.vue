@@ -98,7 +98,7 @@
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">timer</i></div>
                         <div class="item-title">Zone Updater Delay</div>
-                        <div class="item-after">{{sharedState.zoneUpdaterDelay}}</div>
+                        <div class="item-after">{{sharedState.zoneUpdaterDelay}} min(s)</div>
                     </div>
                 </li>
                 <li class="item-content">
@@ -113,7 +113,7 @@
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">speaker_notes_off</i></div>
                         <div class="item-title">Messages Time To Live</div>
-                        <div class="item-after">{{sharedState.messagesTTL}}</div>
+                        <div class="item-after">{{sharedState.messagesTTL}} day(s)</div>
                     </div>
                 </li>
             </f7-list-group>

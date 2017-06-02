@@ -31,8 +31,16 @@
                 <li class="item-content">
                     <div class="item-inner">
                         <div class="item-media"><i class="material-icons">location_on</i></div>
-                        <div class="item-title">Location coords</div>
-                        <div class="item-after">11 22</div>
+                        <div class="item-title">Location exact - Longitude</div>
+                        <div class="item-after">lon</div>
+                    </div>
+                </li>
+
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-media"><i class="material-icons">location_on</i></div>
+                        <div class="item-title">Location exact - Latitude</div>
+                        <div class="item-after">lat</div>
                     </div>
                 </li>
 

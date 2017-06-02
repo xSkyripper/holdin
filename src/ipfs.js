@@ -41,7 +41,6 @@ const ipfs = {
           }
         });
 
-        //TODO: subscribe to pubsub
         self.updateZone();
         self.store.setStatusIpfsPubSub(true);
         cb();
