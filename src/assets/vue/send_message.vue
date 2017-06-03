@@ -74,7 +74,8 @@
                 let d = new Date();
 
                 let rawMessage = {
-                    id: "ipfsId",
+                    id: null,
+                    from: self.sharedState.nodeId,
                     username: self.sharedState.username,
                     locationZone: self.sharedState.locationZone.zoneId,
                     locationExact: {

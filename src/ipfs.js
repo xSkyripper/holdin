@@ -83,15 +83,15 @@ const ipfs = {
   recvMessage(objMessageHash) {
     console.log("testMsgRcvr:");
     let msgHash = objMessageHash.data.toString();
-    console.log(msgHash);
+    console.log(objMessageHash);
 
     this.ipfsApi.object.data(msgHash, function (err, data) {
       if (err)
         throw err;
 
-      //TODO: complete ID in msg object and save it to message
-
-      console.log(JSON.parse(data.toString()));
+      let recvdMessage = JSON.parse(data.toString());
+      recvdMessage.id = msgHash;
+      console.log(recvdMessage);
     });
   },
 
