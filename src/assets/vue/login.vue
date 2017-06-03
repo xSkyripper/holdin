@@ -3,7 +3,7 @@
         <f7-view>
             <f7-pages>
                 <f7-page login-screen>
-                    <f7-login-screen-title>H.O.L.D.I.N Info</f7-login-screen-title>
+                    <f7-login-screen-title>User Info</f7-login-screen-title>
 
                     <f7-list form>
                         <f7-list-item>

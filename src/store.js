@@ -210,6 +210,17 @@ const store = {
       msg.id === msgId && self.state.messages.splice(ind, 1)
     });
   },
+  getMessage(msgId) {
+    this.debug && console.log('getMessage: ', msgId);
+    let self = this;
+    let message = null;
+
+    self.state.messages.forEach(function (msg, ind) {
+      msg.id === msgId && (message = msg)
+    });
+
+    return message;
+  },
 
 
   setStatusNetwork(newStatus) {

@@ -61,7 +61,7 @@
                     '</div>' +
                     '<div class="timeline-item-title">{{username}}</div>' +
                     '<div class="timeline-item-subtitle">{{locationZone}}</div>' +
-                    '<div class="timeline-item-text">{{type}}</div>' +
+                    '<div class="timeline-item-text">{{locationExact.lon}}, {{locationExact.lat}}</div>' +
                     '{{#js_compare "this.type === \'alert\'"}}' +
                     '<a href="/message/{{id}}" class="button color-red">View</a>' +
                     '{{/js_compare}}' +
