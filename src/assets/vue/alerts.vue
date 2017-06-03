@@ -59,8 +59,8 @@
                     '{{#js_compare "this.type === \'warn\'"}}<i class="material-icons msg-mark warn">error</i>{{/js_compare}}' +
                     '{{#js_compare "this.type === \'info\'"}}<i class="material-icons msg-mark info">info</i>{{/js_compare}}' +
                     '</div>' +
-                    '<div class="timeline-item-title">{{name}}</div>' +
-                    '<div class="timeline-item-subtitle">{{location}}</div>' +
+                    '<div class="timeline-item-title">{{username}}</div>' +
+                    '<div class="timeline-item-subtitle">{{locationZone}}</div>' +
                     '<div class="timeline-item-text">{{type}}</div>' +
                     '{{#js_compare "this.type === \'alert\'"}}' +
                     '<a href="/message/{{id}}" class="button color-red">View</a>' +

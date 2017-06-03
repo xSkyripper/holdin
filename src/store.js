@@ -27,8 +27,8 @@ function sha1Hash(txt) {
 }
 
 function cmpMsgDate(obj1, obj2) {
-  let d1 = new Date(obj1.year, obj1.month, obj1.day, obj1.time.split(":")[0], obj1.time.split(":")[1]);
-  let d2 = new Date(obj2.year, obj2.month, obj2.day, obj2.time.split(":")[0], obj2.time.split(":")[1]);
+  let d1 = new Date(obj1.year, obj1.month, obj1.day, obj1.time.split(":")[0], obj1.time.split(":")[1], obj1.time.split(":")[2]);
+  let d2 = new Date(obj2.year, obj2.month, obj2.day, obj2.time.split(":")[0], obj2.time.split(":")[1], obj2.time.split(":")[2]);
   return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
 }
 
@@ -90,10 +90,10 @@ const store = {
     temp !== null && temp !== undefined &&
     (this.state.locationExact = temp);
 
-    temp = lsGetObj('messages');
-    temp !== null && temp.forEach(function (msg) {
-      self.state.messages.push(msg);
-    });
+    // temp = lsGetObj('messages');
+    // temp !== null && temp.forEach(function (msg) {
+    //   self.state.messages.push(msg);
+    // });
 
     temp = lsGetObj('messagesTTL');
     temp !== null && temp !== undefined &&
@@ -109,7 +109,7 @@ const store = {
     lsSetObj('locationZone', self.state.locationZone);
     lsSetObj('zoneUpdaterDelay', self.state.zoneUpdaterDelay);
     lsSetObj('locationExact', self.state.locationExact);
-    lsSetObj('messages', self.state.messages);
+    // lsSetObj('messages', self.state.messages);
     lsSetObj('messagesTTL', self.state.messagesTTL);
   },
 
@@ -153,7 +153,7 @@ const store = {
       // only update if the zone is different
       self.state.zoneHash !== zone.zoneHash && self.setLocationZone(zone);
 
-      console.log(self.state.zoneUpdaterDelay);
+      self.debug && console.log(self.state.zoneUpdaterDelay);
       self.debug && console.log('resetZoneUpdater: ', zone);
     }
 

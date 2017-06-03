@@ -19,11 +19,11 @@ const ipfs = {
       appFilesDir: cordova.file.dataDirectory.split("file://")[1] + "files/",
       resetRepo: false
     }, function (res) {
-      console.log(res);
+      self.debug && console.log(res);
       self.store.setStatusIpfsRepo(true);
 
       self.ipfsCordova.start(function (res) {
-        console.log(res);
+        self.debug && console.log(res);
         self.store.setStatusIpfsDaemon(true);
         try {
           self.ipfsApi = new self.ipfsApi();
@@ -45,19 +45,20 @@ const ipfs = {
         self.store.setStatusIpfsPubSub(true);
         cb();
       }, function (err) {
-        console.log(err);
+        self.debug && console.log(err);
         self.store.setStatusIpfsDaemon(false);
         cb(err);
       });
 
     }, function (err) {
-      console.log(err);
+      self.debug && console.log(err);
       self.store.setStatusIpfsRepo(false);
       cb(err);
     });
   },
 
   sendMessage(rawMessage) {
+    this.debug && console.log("sendMessage: ", rawMessage);
     let self = this;
 
     this.ipfsApi.object.put({
@@ -67,8 +68,6 @@ const ipfs = {
       function (err, node) {
         if (err)
           throw err;
-
-        //TODO: save node.toJSON().multihash as ID for message
 
         self.ipfsApi.pubsub.publish(
           self.store.state.locationZone.zoneHash,
@@ -81,29 +80,33 @@ const ipfs = {
       });
   },
   recvMessage(objMessageHash) {
-    console.log("testMsgRcvr:");
-    let msgHash = objMessageHash.data.toString();
-    console.log(objMessageHash);
+    // let self = this;
 
-    this.ipfsApi.object.data(msgHash, function (err, data) {
+    this.debug && console.log("testMsgRcvr:");
+    let msgHash = objMessageHash.data.toString();
+    this.debug && console.log(objMessageHash);
+
+    this.ipfsApi.object.data(msgHash, (err, data) => {
       if (err)
         throw err;
 
       let recvdMessage = JSON.parse(data.toString());
       recvdMessage.id = msgHash;
-      console.log(recvdMessage);
+      this.store.addMessage(recvdMessage);
+
+      this.debug && console.log(recvdMessage);
     });
   },
 
   updateZone() {
-    console.log("updateZone: " + this.state.zoneHash + " => " + this.store.state.locationZone.zoneHash);
+    this.debug && console.log("updateZone: " + this.state.zoneHash + " => " + this.store.state.locationZone.zoneHash);
     let self = this;
 
     setInterval(function () {
       if (self.state.zoneHash !== self.store.state.locationZone.zoneHash) {
-        console.log("updateZone: unsub: " + self.state.zoneHash);
+        self.debug && console.log("updateZone: unsub: " + self.state.zoneHash);
         self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.recvMessage.bind(self));
-        console.log("updateZone: sub: " + self.store.state.locationZone.zoneHash);
+        self.debug && console.log("updateZone: sub: " + self.store.state.locationZone.zoneHash);
         self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.recvMessage.bind(self));
         self.state.zoneHash = self.store.state.locationZone.zoneHash;
       }

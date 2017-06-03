@@ -82,7 +82,7 @@
                         lon: self.sharedState.locationExact.lon,
                         lat: self.sharedState.locationExact.lat
                     },
-                    time: String(d.getHours()) + ":" + String(d.getMinutes()),
+                    time: String(d.getHours()) + ":" + String(d.getMinutes()) + ":" + String(d.getSeconds()),
                     day: String(d.getDate()),
                     month: String(d.getMonth()),
                     year: String(d.getFullYear()),
@@ -90,7 +90,6 @@
                     details: self.privateState.details
                 };
 
-                console.log("send_message: sendMsg: ", rawMessage);
 
                 this.$myIpfs.sendMessage(rawMessage);
 
