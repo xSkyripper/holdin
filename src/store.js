@@ -197,6 +197,28 @@ const store = {
 
     this.state.messagesTTL = newMsgTTL;
   },
+  deleteOldMessagesUpdater() {
+    this.debug && console.log('startLocationWatcher: ');
+    let self = this;
+
+    function deleteOldMessages() {
+      let now = new Date();
+
+      self.state.messages.forEach(function (msg, ind) {
+        let deadDate = new Date(msg.year, msg.month, String(parseInt(msg.day) + parseInt(self.state.messagesTTL)), msg.time.split(":")[0], msg.time.split(":")[1], msg.time.split(":")[2]);
+
+        if (deadDate <= now) {
+          console.log(self.state.messages[ind], ' has to die !');
+          self.state.messages.splice(ind, 1);// is this right ?
+        } else {
+          console.log(self.state.messages[ind], ' will live !');
+        }
+      });
+    }
+
+    deleteOldMessages();
+    setInterval(deleteOldMessages, 60000 * 1);
+  },
   addMessage(newMessage) {
     this.debug && console.log('addMessage: ', newMessage);
 
