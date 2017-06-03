@@ -82,33 +82,16 @@
                         lat: self.sharedState.locationExact.lat
                     },
                     time: String(d.getHours()) + ":" + String(d.getMinutes()),
-                    day: String(d.getDay()),
+                    day: String(d.getDate()),
                     month: String(d.getMonth()),
                     year: String(d.getFullYear()),
                     type: self.privateState.type,
                     details: self.privateState.details
                 };
 
-                const obj = {
-                    Data: new Buffer(JSON.stringify(rawMessage)),
-                    Links: []
-                };
-
-                this.$myIpfs.ipfsApi.object.put(obj, function (err, node) {
-                    if (err)
-                        throw err;
-
-                    self.$myIpfs.ipfsApi.pubsub.publish(
-                        self.$myStore.state.locationZone.zoneHash,
-                        new Buffer(node.toJSON().multihash),
-                        function (err) {
-                            if (err)
-                                throw err;
-                        });
-                });
-
                 console.log("send_message: sendMsg: ", rawMessage);
 
+                this.$myIpfs.sendMessage(rawMessage);
 
                 this.$f7.alert('Message will be sent ASAP !', 'Info', function () {
                     self.$router.back();

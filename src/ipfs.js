@@ -57,14 +57,39 @@ const ipfs = {
     });
   },
 
-  testMsgRcvr(objMsgHash) {
+  sendMessage(rawMessage) {
+    let self = this;
+
+    this.ipfsApi.object.put({
+        Data: new Buffer(JSON.stringify(rawMessage)),
+        Links: []
+      },
+      function (err, node) {
+        if (err)
+          throw err;
+
+        //TODO: save node.toJSON().multihash as ID for message
+
+        self.ipfsApi.pubsub.publish(
+          self.store.state.locationZone.zoneHash,
+          new Buffer(node.toJSON().multihash),
+          function (err) {
+            if (err)
+              throw err;
+          });
+
+      });
+  },
+  recvMessage(objMessageHash) {
     console.log("testMsgRcvr:");
-    let msgHash = objMsgHash.data.toString();
+    let msgHash = objMessageHash.data.toString();
     console.log(msgHash);
 
     this.ipfsApi.object.data(msgHash, function (err, data) {
       if (err)
         throw err;
+
+      //TODO: complete ID in msg object and save it to message
 
       console.log(JSON.parse(data.toString()));
     });
@@ -77,9 +102,9 @@ const ipfs = {
     setInterval(function () {
       if (self.state.zoneHash !== self.store.state.locationZone.zoneHash) {
         console.log("updateZone: unsub: " + self.state.zoneHash);
-        self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.testMsgRcvr.bind(self));
+        self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.recvMessage.bind(self));
         console.log("updateZone: sub: " + self.store.state.locationZone.zoneHash);
-        self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.testMsgRcvr.bind(self));
+        self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.recvMessage.bind(self));
         self.state.zoneHash = self.store.state.locationZone.zoneHash;
       }
     }, 1000);

@@ -35,8 +35,8 @@ function cmpMsgDate(obj1, obj2) {
 function lsSetObj(key, obj) {
   console.log("lsSetOb: " + key);
   console.log(obj);
-  console.log("lsSetOb: stringify: " + key);
-  console.log(JSON.stringify(obj));
+  // console.log("lsSetOb: stringify: " + key);
+  // console.log(JSON.stringify(obj));
   localStorage.setItem(key, JSON.stringify(obj));
 }
 
