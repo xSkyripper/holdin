@@ -42,7 +42,7 @@ const ipfs = {
         });
 
         self.updateZone();
-        self.store.setStatusIpfsPubSub(true);
+
         cb();
       }, function (err) {
         self.debug && console.log(err);
@@ -111,6 +111,8 @@ const ipfs = {
         self.state.zoneHash = self.store.state.locationZone.zoneHash;
       }
     }, 1000);
+
+    this.store.setStatusIpfsPubSub(true);
   },
 };
 
