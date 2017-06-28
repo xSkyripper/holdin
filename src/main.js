@@ -115,11 +115,12 @@ function onDeviceReady() {
               });
             } else {
               //IPFS inited successfully
-              self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
               self.$myStore.retrieveData();
               self.$myStore.startLocationWatcher();
               self.$myStore.deleteOldMessagesUpdater();
               self.$myStore.retrieveMessages(self.$myIpfs.ipfsApi);
+
+              self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
             }
           });
         //initIpfs

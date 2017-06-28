@@ -107,37 +107,6 @@ const store = {
     this.persistMessages();
     lsSetObj('messagesTTL', self.state.messagesTTL);
   },
-  retrieveMessages(ipfsApi) {
-    this.debug && console.log('retrieveMessages:');
-    let temp = lsGetObj('messages');
-
-    temp !== null && temp.forEach((msgHash) => {
-      console.log('Retrieving:' + msgHash);
-
-      //only add if it doesn't exist
-      this.getMessage(msgHash) === null &&
-      ipfsApi.object.data(msgHash, (err, data) => {
-        if (err)
-          throw err;
-
-        let savedMessage = JSON.parse(data.toString());
-        savedMessage.id = msgHash;
-        this.addMessage(savedMessage);
-
-        this.debug && console.log(savedMessage);
-      });
-    });
-  },
-  persistMessages() {
-    this.debug && console.log('persistMessages: ');
-
-    let temp = [];
-    this.state.messages.forEach(function (msg, ind) {
-      temp.push(msg.id);
-    });
-    console.log(temp);
-    lsSetObj('messages', temp);
-  },
 
   setNodeId(newNodeId) {
     this.debug && console.log('setNodeId: ', newNodeId);
@@ -270,7 +239,38 @@ const store = {
 
     return message;
   },
+  retrieveMessages(ipfsApi) {
+    this.debug && console.log('retrieveMessages:');
+    let temp = lsGetObj('messages');
 
+    temp !== null && temp.forEach((msgHash) => {
+      this.debug && console.log('Retrieving:' + msgHash);
+
+      //only add if it doesn't exist
+      this.getMessage(msgHash) === null &&
+      ipfsApi.object.data(msgHash, (err, data) => {
+        if (err)
+          throw err;
+
+        let savedMessage = JSON.parse(data.toString());
+        savedMessage.id = msgHash;
+        this.addMessage(savedMessage);
+
+        this.debug && console.log(savedMessage);
+      });
+
+    });
+  },
+  persistMessages() {
+    this.debug && console.log('persistMessages: ');
+
+    let temp = [];
+    this.state.messages.forEach(function (msg, ind) {
+      temp.push(msg.id);
+    });
+    console.log(temp);
+    lsSetObj('messages', temp);
+  },
 
   setStatusNetwork(newStatus) {
     this.debug && console.log('setStatusNetwork: ', newStatus);
