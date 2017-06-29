@@ -57,6 +57,9 @@
         methods: {
             onStart() {
                 console.log('login:onStart');
+
+                this.$myStore.resetZoneUpdater();
+
                 this.$f7.closeModal();
             }
         }

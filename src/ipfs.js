@@ -34,8 +34,9 @@ const ipfs = {
         }
 
         self.ipfsApi.id(function (err, iden) {
-          if (err)
+          if (err) {
             cb("IPFS cannot fetch IPFS ID ! Error: " + err);
+          }
           else {
             self.store.setNodeId(iden.id);
           }
