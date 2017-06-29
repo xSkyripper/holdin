@@ -73,6 +73,10 @@
 
                 let d = new Date();
 
+                let h = d.getHours() < 10 ? "0" + String(d.getHours()) : String(d.getHours());
+                let m = d.getMinutes() < 10 ? "0" + String(d.getMinutes()) : String(d.getMinutes());
+                let s = d.getSeconds() < 10 ? "0" + String(d.getSeconds()) : String(d.getSeconds());
+
                 let rawMessage = {
                     id: null,
                     from: self.sharedState.nodeId,
@@ -82,9 +86,9 @@
                         lon: self.sharedState.locationExact.lon,
                         lat: self.sharedState.locationExact.lat
                     },
-                    time: String(d.getHours()) + ":" + String(d.getMinutes()) + ":" + String(d.getSeconds()),
+                    time: h + ":" + m + ":" + s,
                     day: String(d.getDate()),
-                    month: String(d.getMonth()),
+                    month: (d.getMonth() + 1) < 10 ? "0" + String(d.getMonth() + 1) : String(d.getMonth() + 1),
                     year: String(d.getFullYear()),
                     type: self.privateState.type,
                     details: self.privateState.details

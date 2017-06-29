@@ -176,7 +176,7 @@ const store = {
       self.setStatusLocation(true);
     }, function (err) {
       self.setStatusLocation(false);
-      window.f7.alert('Location Error ! code: ' + err.code + '\n' +
+      window.f7.alert('Location Error ! Maybe it is not enabled ? Code: ' + err.code + '\n' +
         'message: ' + err.message + '\n');
     }, {
       enableHighAccuracy: true,
