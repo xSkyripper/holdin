@@ -52,7 +52,6 @@ function onDeviceReady() {
         document.addEventListener('pause', function () {
           self.$myStore.persistData();
         }, false);
-
         document.addEventListener('backbutton', function (evt) {
           evt.preventDefault();
           console.log(self);
@@ -90,7 +89,11 @@ function onDeviceReady() {
 
         //f7 vue related
         this.$f7.showPreloader("Preparing IPFS ...");
-        this.$myIpfs.initIpfs(new CordovaIpfs(), ipfsAPI, this.$myStore,
+        this.$myIpfs.startIpfs({
+            cipfs: new CordovaIpfs(),
+            aipfs: ipfsAPI,
+            store: this.$myStore,
+          },
           function (err) {
             self.$f7.hidePreloader();
             if (err) {
@@ -123,7 +126,7 @@ function onDeviceReady() {
               self.$f7.alert("IPFS Prepared successfully !", "HOLDIN Info");
             }
           });
-        //initIpfs
+        //startIpfs
       },
       onF7Init: function () {
         this.initSystem();

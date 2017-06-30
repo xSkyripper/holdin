@@ -1,3 +1,5 @@
+import Q from 'q'
+
 const ipfs = {
   debug: true,
   ipfsCordova: null,
@@ -8,54 +10,149 @@ const ipfs = {
     zoneHash: null
   },
 
-  initIpfs(cipfs, aipfs, store, cb) {
+  startIpfs(ctx, cb) {
     let self = this;
-    this.ipfsCordova = cipfs;
-    this.ipfsApi = aipfs;
-    this.store = store;
+    this.ipfsCordova = ctx.cipfs;
+    this.ipfsApi = ctx.aipfs;
+    this.store = ctx.store;
 
-    self.ipfsCordova.init({
-      src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
-      appFilesDir: cordova.file.dataDirectory.split("file://")[1] + "files/",
-      resetRepo: false
-    }, function (res) {
-      self.debug && console.log(res);
-      self.store.setStatusIpfsRepo(true);
+    // self.ipfsCordova.init({
+    //   src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
+    //   appFilesDir: cordova.file.dataDirectory.split("file://")[1] + "files/",
+    //   resetRepo: false
+    // }, function (res) {
+    //   self.debug && console.log(res);
+    //   self.store.setStatusIpfsRepo(true);
+    //
+    //   self.ipfsCordova.start(function (res) {
+    //     self.debug && console.log(res);
+    //     self.store.setStatusIpfsDaemon(true);
+    //     try {
+    //       self.ipfsApi = new self.ipfsApi();
+    //     } catch (err) {
+    //       self.store.setStatusIpfsPubSub(false);
+    //       cb("IPFS Cannot connect ! Error: " + err);
+    //       return;
+    //     }
+    //
+    //     self.ipfsApi.id(function (err, iden) {
+    //       if (err) {
+    //         cb("IPFS cannot fetch IPFS ID ! Error: " + err);
+    //       }
+    //       else {
+    //         self.store.setNodeId(iden.id);
+    //       }
+    //     });
+    //
+    //     self.updateZone();
+    //
+    //     cb();
+    //   }, function (err) {
+    //     self.debug && console.log(err);
+    //     self.store.setStatusIpfsDaemon(false);
+    //     cb(err);
+    //   });
+    //
+    // }, function (err) {
+    //   self.debug && console.log(err);
+    //   self.store.setStatusIpfsRepo(false);
+    //   cb(err);
+    // });
 
-      self.ipfsCordova.start(function (res) {
+    function prepareIpfs() {
+      let dfrd = new Q.defer();
+
+      self.ipfsCordova.init({
+        src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
+        appFilesDir: cordova.file.dataDirectory.split("file://")[1] + "files/",
+        resetRepo: false
+      }, function (res) {
         self.debug && console.log(res);
-        self.store.setStatusIpfsDaemon(true);
-        try {
-          self.ipfsApi = new self.ipfsApi();
-        } catch (err) {
-          self.store.setStatusIpfsPubSub(false);
-          cb("IPFS Cannot connect ! Error: " + err);
-          return;
-        }
+        self.store.setStatusIpfsRepo(true);
 
-        self.ipfsApi.id(function (err, iden) {
-          if (err) {
-            cb("IPFS cannot fetch IPFS ID ! Error: " + err);
-          }
-          else {
-            self.store.setNodeId(iden.id);
-          }
-        });
-
-        self.updateZone();
-
-        cb();
+        dfrd.resolve();
       }, function (err) {
         self.debug && console.log(err);
-        self.store.setStatusIpfsDaemon(false);
-        cb(err);
+        self.store.setStatusIpfsRepo(false);
+        //cb(err);
+        dfrd.reject(err);
       });
 
-    }, function (err) {
-      self.debug && console.log(err);
-      self.store.setStatusIpfsRepo(false);
-      cb(err);
-    });
+
+      return dfrd.promise;
+    }
+
+    function startDaemon() {
+      let dfrd = new Q.defer();
+
+      self.ipfsCordova.start(
+        function (res) {
+          self.debug && console.log(res);
+          self.store.setStatusIpfsDaemon(true);
+
+          dfrd.resolve();
+        }, function (err) {
+          self.debug && console.log(err);
+          self.store.setStatusIpfsDaemon(false);
+          //cb(err);
+          dfrd.reject(new Error(err));
+        });
+
+      return dfrd.promise;
+    }
+
+    function connectApi() {
+      let dfrd = new Q.defer();
+
+      try {
+        self.ipfsApi = new self.ipfsApi();
+      } catch (err) {
+        self.store.setStatusIpfsPubSub(false);
+        dfrd.reject(err);
+        // cb("IPFS Cannot connect ! Error: " + err);
+        // return;
+      }
+
+      dfrd.resolve();
+
+      return dfrd.promise;
+    }
+
+    function getId() {
+      let dfrd = new Q.defer();
+
+      self.ipfsApi.id(function (err, iden) {
+        if (err)
+        // cb("IPFS cannot fetch IPFS ID ! Error: " + err);
+          dfrd.reject(err);
+
+        self.store.setNodeId(iden.id);
+        dfrd.resolve();
+      });
+
+      return dfrd.promise;
+    }
+
+    prepareIpfs()
+      .then(() => {
+        return startDaemon();
+      })
+      .then(() => {
+        return connectApi();
+      })
+      .then(() => {
+        return getId();
+      })
+      .then(() => {
+        self.updateZone();
+      })
+      .then(() => {
+        cb();
+      })
+      .catch((err) => {
+        console.log("catch error in q: " + err);
+        cb(err);
+      })
   },
 
   sendMessage(rawMessage) {
