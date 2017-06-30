@@ -118,30 +118,12 @@ const ipfs = {
       return dfrd.promise;
     }
 
-    function getId() {
-      let dfrd = new Q.defer();
-
-      self.ipfsApi.id(function (err, iden) {
-        if (err)
-        // cb("IPFS cannot fetch IPFS ID ! Error: " + err);
-          dfrd.reject(err);
-
-        self.store.setNodeId(iden.id);
-        dfrd.resolve();
-      });
-
-      return dfrd.promise;
-    }
-
     prepareIpfs()
       .then(() => {
         return startDaemon();
       })
       .then(() => {
         return connectApi();
-      })
-      .then(() => {
-        return getId();
       })
       .then(() => {
         self.updateZone();
