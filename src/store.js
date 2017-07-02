@@ -70,7 +70,8 @@ const store = {
     statusIpfsPubSub: false,
 
     notifsAlerts: 0,
-    notifsProfile: 0
+    notifsProfile: 0,
+    notifsLocal: true
   },
 
   retrieveData() {
@@ -230,6 +231,12 @@ const store = {
     self.state.messages.forEach(function (msg, ind) {
       msg.id === msgId && self.state.messages.splice(ind, 1)
     });
+  },
+  remAllMessages() {
+    this.debug && console.log('remAllMessages:');
+    let self = this;
+
+    this.state.messages.splice(0, this.state.messages.length)
   },
   getMessage(msgId) {
     this.debug && console.log('getMessage: ', msgId);

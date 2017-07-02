@@ -1,6 +1,6 @@
 <template>
     <div class="page-content">
-        <f7-button @click="addRand">Add Rand  {{myLength}}</f7-button>
+        <!--<f7-button @click="addRand">Add Rand  {{myLength}}</f7-button>-->
         <f7-timeline class="virtual-list">
         </f7-timeline>
     </div>
@@ -43,6 +43,12 @@
         methods: {
             onF7Init() {
                 let self = this;
+
+//                '{{#js_compare "this.from === @global.myNodeId"}}' +
+//                '<span class="color-green">{{username}}</span>' +
+//                '{{else}}<span>{{username}}</span>' +
+//                '{{/js_compare}}' +
+
                 this.vList = this.$f7.virtualList('.virtual-list', {
                     items: self.messages,
                     height: 170, // is this right ?

@@ -1,13 +1,11 @@
 <template>
     <div class="page-content">
         <f7-block-title>
-            <h2>Home Title</h2>
+            <h2>Welcome to H.O.L.D.I.N.</h2>
         </f7-block-title>
-
         <f7-block inner>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque dignissimos ducimus, perspiciatis sint voluptatum. Enim eum exercitationem, nihil nisi obcaecati optio quo ratione sapiente sequi voluptates. Quisquam, reprehenderit vero?
-
-            <f7-button @click="ipfsId">IPFS ID</f7-button>
+            Help Over Local Distributed Interconnected Networks is an application meant to help people communicate when there is no way to access the global Internetwork.
+            You can visualize the list of messages (Alerts), send messages, view your profile (Profile) or set your own system properties (Settings).
         </f7-block>
     </div>
     <!-- page-content -->

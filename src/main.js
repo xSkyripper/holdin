@@ -176,17 +176,20 @@ function onDeviceReady() {
           console.log("recvMsgCB: ");
           console.log(recvdMessage);
 
-          cordova.plugins.notification.local.schedule({
-            title: "Alert received: " + recvdMessage.type + "!",
-            message: "From: " + recvdMessage.username,
-            data: {msgId: recvdMessage.id}
-          });
+          if (self.$myStore.state.notifsLocal && recvdMessage.from !== self.$myStore.state.nodeId) {
 
-          cordova.plugins.notification.local.on("click", function (notification) {
-            let msgId = JSON.parse(notification.data).msgId;
-            console.log(msgId);
-            console.log(self.$router.load({url: '/message/' + msgId}));
-          });
+            cordova.plugins.notification.local.schedule({
+              title: "Alert received: " + recvdMessage.type + "!",
+              message: "From: " + recvdMessage.username,
+              data: {msgId: recvdMessage.id}
+            });
+
+            cordova.plugins.notification.local.on("click", function (notification) {
+              let msgId = JSON.parse(notification.data).msgId;
+              console.log(msgId);
+              console.log(self.$router.load({url: '/message/' + msgId}));
+            });
+          }
 
         }
 
