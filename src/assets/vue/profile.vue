@@ -189,7 +189,11 @@
             }
         },
         props: {},
-        methods: {}
+        methods: {
+            onPageInit: function (app, page) {
+                console.log("PROFILE PAGE INITED");
+            },
+        }
     }
 </script>
 

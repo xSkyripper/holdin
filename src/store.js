@@ -67,7 +67,10 @@ const store = {
     statusLocation: false,
     statusIpfsRepo: false,
     statusIpfsDaemon: false,
-    statusIpfsPubSub: false
+    statusIpfsPubSub: false,
+
+    notifsAlerts: 0,
+    notifsProfile: 0
   },
 
   retrieveData() {
@@ -297,6 +300,28 @@ const store = {
 
     this.state.statusIpfsPubSub = newStatus;
   },
+
+  addNotifsAlerts() {
+    this.debug && console.log('addNotifsAlerts: ');
+
+    this.state.notifsAlerts += 1;
+  },
+  clearNotifsAlerts() {
+    this.debug && console.log('clearNotifsAlerts: ');
+
+    this.state.notifsAlerts = 0;
+  },
+  addNotifsProfile() {
+    this.debug && console.log('addNotifsProfile: ');
+
+    this.state.notifsProfile += 1;
+  },
+  clearNotifsProfile() {
+    this.debug && console.log('clearNotifsProfile');
+
+    this.state.notifsProfile = 0;
+  }
+
 
 };
 

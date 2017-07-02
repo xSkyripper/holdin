@@ -5,6 +5,7 @@ const ipfs = {
   ipfsCordova: null,
   ipfsApi: null,
   store: null,
+  recvMsgCB: null,
 
   state: {
     zoneHash: null
@@ -15,6 +16,7 @@ const ipfs = {
     this.ipfsCordova = ctx.cipfs;
     this.ipfsApi = ctx.aipfs;
     this.store = ctx.store;
+    this.recvMsgCB = ctx.recvMsgCB;
 
     // self.ipfsCordova.init({
     //   src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
@@ -126,7 +128,7 @@ const ipfs = {
         return connectApi();
       })
       .then(() => {
-        self.updateZone();
+        self.updateZone(ctx.recvMsgCb);
       })
       .then(() => {
         cb();
@@ -175,6 +177,8 @@ const ipfs = {
       this.store.addMessage(recvdMessage);
 
       this.debug && console.log(recvdMessage);
+
+      this.recvMsgCB(recvdMessage);
     });
   },
 
@@ -185,9 +189,21 @@ const ipfs = {
     setInterval(function () {
       if (self.state.zoneHash !== self.store.state.locationZone.zoneHash) {
         self.debug && console.log("updateZone: unsub: " + self.state.zoneHash);
-        self.state.zoneHash !== null && self.ipfsApi.pubsub.unsubscribe(self.state.zoneHash, self.recvMessage.bind(self));
+
+        self.state.zoneHash !== null &&
+        self.ipfsApi.pubsub.unsubscribe(
+          self.state.zoneHash,
+          self.recvMessage.bind(self)
+        );
+
+
         self.debug && console.log("updateZone: sub: " + self.store.state.locationZone.zoneHash);
-        self.store.state.locationZone.zoneHash !== null && self.ipfsApi.pubsub.subscribe(self.store.state.locationZone.zoneHash, self.recvMessage.bind(self));
+
+        self.store.state.locationZone.zoneHash !== null &&
+        self.ipfsApi.pubsub.subscribe(
+          self.store.state.locationZone.zoneHash,
+          self.recvMessage.bind(self)
+        );
         self.state.zoneHash = self.store.state.locationZone.zoneHash;
       }
     }, 1000);

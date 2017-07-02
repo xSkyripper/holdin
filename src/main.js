@@ -171,6 +171,25 @@ function onDeviceReady() {
           return dfrd.promise;
         }
 
+        function recvMsgCB(recvdMessage) {
+          self.$myStore.addNotifsAlerts();
+          console.log("recvMsgCB: ");
+          console.log(recvdMessage);
+
+          cordova.plugins.notification.local.schedule({
+            title: "Alert received: " + recvdMessage.type + "!",
+            message: "From: " + recvdMessage.username,
+            data: {msgId: recvdMessage.id}
+          });
+
+          cordova.plugins.notification.local.on("click", function (notification) {
+            let msgId = JSON.parse(notification.data).msgId;
+            console.log(msgId);
+            console.log(self.$router.load({url: '/message/' + msgId}));
+          });
+
+        }
+
         function startIpfsSystem() {
           let dfrd = new Q.defer();
 
@@ -178,6 +197,7 @@ function onDeviceReady() {
               cipfs: new CordovaIpfs(),
               aipfs: ipfsAPI,
               store: self.$myStore,
+              recvMsgCB: recvMsgCB
             },
             function (err) {
               if (err)
@@ -243,6 +263,7 @@ function onDeviceReady() {
             console.error(err);
 
             self.$f7.hidePreloader();
+            self.$myStore.addNotifsProfile();
 
             window.f7.modal({
               title: 'HOLDIN Error',

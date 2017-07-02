@@ -47,16 +47,28 @@
 
                         <f7-toolbar class="theme-blue" tabbar bottom>
                             <f7-link tab-link="#home">
-                                <i class="material-icons">home<span class="badge bg-red">1</span></i>
+                                <i class="material-icons">home
+                                    <!--<span class="badge bg-red">1</span>-->
+                                </i>
                             </f7-link>
-                            <f7-link tab-link="#alerts">
-                                <i class="material-icons">warning<span class="badge bg-red">1</span></i>
+                            <f7-link tab-link="#alerts" @click="onAlertsLink">
+                                <i class="material-icons">warning
+                                    <span v-if="sharedState.notifsAlerts !== 0" class="badge bg-red">
+                                        {{sharedState.notifsAlerts}}
+                                    </span>
+                                </i>
                             </f7-link>
-                            <f7-link tab-link="#profile">
-                                <i class="material-icons">account_circle<span class="badge bg-red">1</span></i>
+                            <f7-link tab-link="#profile" @click="onProfileLink">
+                                <i class="material-icons">account_circle
+                                    <span v-if="sharedState.notifsProfile !== 0" class="badge bg-red">
+                                        {{sharedState.notifsProfile}}
+                                    </span>
+                                </i>
                             </f7-link>
                             <f7-link tab-link="#settings">
-                                <i class="material-icons">settings<span class="badge bg-red">1</span></i>
+                                <i class="material-icons">settings
+                                    <!--<span class="badge bg-red">1</span>-->
+                                </i>
                             </f7-link>
                         </f7-toolbar>
 
@@ -79,6 +91,7 @@
     export default {
         data() {
             return {
+                sharedState: this.$myStore.state,
                 msgsFilter: 'all'
             }
         },
@@ -95,11 +108,17 @@
             changeInfoFilter() {
                 this.msgsFilter = 'info';
             },
-            checkUserData: function () {
-                this.$f7.loginScreen();
+            onAlertsLink() {
+                console.log("CLICKED ALERTS LINK");
+                this.$myStore.clearNotifsAlerts();
             },
+            onProfileLink() {
+                console.log("CLICKED PROFILE LINK");
+                this.$myStore.clearNotifsProfile();
+            },
+
             onF7Init: function () {
-                this.checkUserData();
+                this.$f7.loginScreen();
             }
         },
         components: {
