@@ -1,8 +1,6 @@
 <template>
     <div class="page-content">
-        <!--<f7-button @click="addRand">Add Rand  {{myLength}}</f7-button>-->
-        <f7-timeline class="virtual-list">
-        </f7-timeline>
+        <f7-timeline class="virtual-list"></f7-timeline>
     </div>
 </template>
 
@@ -29,9 +27,6 @@
                 }
             },
             messages: function (newMsg) {
-//                this.messages.forEach(function (val) {
-//                    console.log(val.id + "  " + val.day + "-" + val.month + "-" + val.year + "  " + val.time);
-//                });
                 this.vList.replaceAllItems(this.messages);
             }
         },
@@ -43,11 +38,6 @@
         methods: {
             onF7Init() {
                 let self = this;
-
-//                '{{#js_compare "this.from === @global.myNodeId"}}' +
-//                '<span class="color-green">{{username}}</span>' +
-//                '{{else}}<span>{{username}}</span>' +
-//                '{{/js_compare}}' +
 
                 this.vList = this.$f7.virtualList('.virtual-list', {
                     items: self.messages,
@@ -90,34 +80,7 @@
                 else if (type === 'info')
                     return 'white';
             },
-            randomIntFromInterval(min, max) {
-                return Math.floor(Math.random() * (max - min + 1) + min);
-            },
-            getRandomMsg(i){
-                let H = String(this.randomIntFromInterval(0, 23));
-                let m = String(this.randomIntFromInterval(0, 59));
-                let day = String(this.randomIntFromInterval(1, 15));
-                H = H.length < 2 ? '0' + H : H;
-                m = m.length < 2 ? '0' + m : m;
-                day = day.length < 2 ? '0' + day : day;
 
-                let types = ['alert', 'warn', 'info'];
-
-                return {
-                    id: i,
-                    name: 'Username ' + i,
-                    location: 'Location ' + i,
-                    type: types[Math.floor(Math.random() * types.length)],
-                    time: H + ':' + m,
-                    day: day,
-                    month: '05',
-                    year: '2017'
-                };
-            },
-            addRand() {
-                this.$myStore.addMessage(this.getRandomMsg(this.messages.length + 1));
-
-            }
         }
     }
 </script>

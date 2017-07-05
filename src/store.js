@@ -55,6 +55,7 @@ const store = {
     nodeId: null,
     username: null,
     messages: [],
+    myMessages: [],
     messagesTTL: 1,
 
     locationZone: {zoneId: null, zoneHash: null},
@@ -224,6 +225,17 @@ const store = {
 
     this.state.messages.splice(bsLocationOf(newMessage, this.state.messages, cmpMsgDate) + 1, 0, newMessage);
   },
+  addMyMessage(newMessage) {
+    this.debug && console.log('addMessage: ', newMessage);
+
+    this.state.myMessages.splice(bsLocationOf(newMessage, this.state.myMessages, cmpMsgDate) + 1, 0, newMessage);
+
+    if (this.state.myMessages.length > 10) {
+      for (let i = 10; i <= this.state.myMessages.length; i++) {
+        this.state.myMessages.splice(i, 1);
+      }
+    }
+  },
   remMessage(msgId) {
     this.debug && console.log('remMessage: ', msgId);
     let self = this;
@@ -236,7 +248,8 @@ const store = {
     this.debug && console.log('remAllMessages:');
     let self = this;
 
-    this.state.messages.splice(0, this.state.messages.length)
+    this.state.messages.splice(0, this.state.messages.length);
+    this.state.myMessages.splice(0, this.state.myMessages.length);
   },
   getMessage(msgId) {
     this.debug && console.log('getMessage: ', msgId);
@@ -265,6 +278,13 @@ const store = {
         let savedMessage = JSON.parse(data.toString());
         savedMessage.id = msgHash;
         this.addMessage(savedMessage);
+
+
+        if (savedMessage.from === this.state.nodeId) {
+          console.log("RETRIEVED A MSG FROM ME");
+          this.addMyMessage(savedMessage);
+        }
+
 
         this.debug && console.log(savedMessage);
       });

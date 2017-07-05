@@ -18,49 +18,6 @@ const ipfs = {
     this.store = ctx.store;
     this.recvMsgCB = ctx.recvMsgCB;
 
-    // self.ipfsCordova.init({
-    //   src: "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-arm.tar.gz",
-    //   appFilesDir: cordova.file.dataDirectory.split("file://")[1] + "files/",
-    //   resetRepo: false
-    // }, function (res) {
-    //   self.debug && console.log(res);
-    //   self.store.setStatusIpfsRepo(true);
-    //
-    //   self.ipfsCordova.start(function (res) {
-    //     self.debug && console.log(res);
-    //     self.store.setStatusIpfsDaemon(true);
-    //     try {
-    //       self.ipfsApi = new self.ipfsApi();
-    //     } catch (err) {
-    //       self.store.setStatusIpfsPubSub(false);
-    //       cb("IPFS Cannot connect ! Error: " + err);
-    //       return;
-    //     }
-    //
-    //     self.ipfsApi.id(function (err, iden) {
-    //       if (err) {
-    //         cb("IPFS cannot fetch IPFS ID ! Error: " + err);
-    //       }
-    //       else {
-    //         self.store.setNodeId(iden.id);
-    //       }
-    //     });
-    //
-    //     self.updateZone();
-    //
-    //     cb();
-    //   }, function (err) {
-    //     self.debug && console.log(err);
-    //     self.store.setStatusIpfsDaemon(false);
-    //     cb(err);
-    //   });
-    //
-    // }, function (err) {
-    //   self.debug && console.log(err);
-    //   self.store.setStatusIpfsRepo(false);
-    //   cb(err);
-    // });
-
     function prepareIpfs() {
       let dfrd = new Q.defer();
 
@@ -174,7 +131,13 @@ const ipfs = {
 
       let recvdMessage = JSON.parse(data.toString());
       recvdMessage.id = msgHash;
+
       this.store.addMessage(recvdMessage);
+
+      if(recvdMessage.from === this.store.state.nodeId) {
+        console.log("RECEIVED A MSG FROM ME");
+        this.store.addMyMessage(recvdMessage);
+      }
 
       this.debug && console.log(recvdMessage);
 
@@ -218,13 +181,3 @@ export default {
     Vue.prototype.$myIpfs = ipfs;
   }
 };
-
-
-// setInterval(function () {
-//   cordova.plugins.notification.local.schedule({
-//     // id: 1,
-//     title: "Single Notif Title",
-//     text: "Single Notification",
-//     data: {key: "val"}
-//   });
-// }, 1000);
